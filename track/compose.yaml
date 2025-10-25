@@ -1,0 +1,44 @@
+services:
+  umami:
+    image: ${TRACK_DOCKER_IMAGE}
+    container_name: ${TRACK_COMPOSE_PROJECT_NAME}_app
+    restart: unless-stopped
+    environment:
+      TZ: ${TIMEZONE:-Europe/Amsterdam}
+      
+      # Database Configuration
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@${CORE_DB_HOST}:${CORE_DB_PORT}/${TRACK_DB_NAME}
+      DATABASE_TYPE: postgresql
+      
+      # Application Secret
+      APP_SECRET: ${TRACK_APP_SECRET}
+      
+      # Redis Cache Integration
+      REDIS_URL: redis://${CORE_REDIS_HOST}:${CORE_REDIS_PORT}
+      CACHE_ENABLED: true
+      
+      
+    networks:
+      - compose_network
+      
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/heartbeat || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+      
+    labels:
+      # Traefik Configuration
+      - 'traefik.enable=${TRACK_TRAEFIK_ENABLED:-true}'
+      
+      # HTTP to HTTPS redirect
+      - 'traefik.http.middlewares.${TRACK_COMPOSE_PROJECT_NAME}-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web.middlewares=${TRACK_COMPOSE_PROJECT_NAME}-redirect-web-secure'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web.rule=Host(`${TRACK_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web.entrypoints=web'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.rule=Host(`${TRACK_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.entrypoints=web-secure'
+      - 'traefik.http.services.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.loadbalancer.server.port=3000'
+      - 'traefik.docker.network=compose_network'

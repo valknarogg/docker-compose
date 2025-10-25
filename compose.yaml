@@ -1,0 +1,11 @@
+name: falcon
+include:
+  - core/compose.yaml
+  - gotify/compose.yaml
+  - track/compose.yaml
+  - proxy/compose.yaml
+
+networks:
+  compose_network:
+    name: ${NETWORK_NAME:-falcon_network}
+    external: true

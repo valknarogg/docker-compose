@@ -1,0 +1,77 @@
+name: "docker.compose"
+version: "1.0.0"
+description: "Valknar's Stacks"
+author: "valknar@pivoine.art"
+license: "private"
+
+envs:
+  default:
+    # Common
+    ADMIN_EMAIL: valknar@pivoine.art
+    NETWORK_NAME: pivoine
+    TIMEZONE: Europe/Berlin
+    # Core
+    CORE_COMPOSE_PROJECT_NAME: core
+    CORE_DB_HOST: postgres
+    CORE_DB_PORT: 5432
+    CORE_REDIS_HOST: redis
+    CORE_REDIS_PORT: 6379
+    CORE_REDIS_IMAGE: redis:7-alpine
+    CORE_POSTGRES_IMAGE: postgres:16-alpine
+    # VPN
+    VPN_TRAEFIK_ENABLED: true
+    VPN_COMPOSE_PROJECT_NAME: vpn
+    VPN_DOCKER_IMAGE: ghcr.io/wg-easy/wg-easy:latest
+    VPN_TRAEFIK_HOST: vpn.pivoine.art
+    # Track
+    TRACK_TRAEFIK_ENABLED: true
+    TRACK_COMPOSE_PROJECT_NAME: track
+    TRACK_DOCKER_IMAGE: ghcr.io/umami-software/umami:postgresql-latest
+    TRACK_TRAEFIK_HOST: track.pivoine.art
+    TRACK_DB_NAME: umami
+    # Blog
+    BLOG_TRAEFIK_ENABLED: true
+    BLOG_COMPOSE_PROJECT_NAME: blog
+    BLOG_DOCKER_IMAGE: joseluisq/static-web-server:latest
+    BLOG_TRAEFIK_HOST: pivoine.art
+    # Sexy
+    SEXY_TRAEFIK_ENABLED: true
+    SEXY_COMPOSE_PROJECT_NAME: sexy
+    SEXY_TRAEFIK_HOST: sexy.pivoine.art
+    SEXY_DIRECTUS_IMAGE: directus/directus:11.12.0
+    SEXY_FRONTEND_IMAGE: node:22
+    SEXY_DB_NAME: directus
+    SEXY_PUBLIC_URL: https://sexy.pivoine.art/api
+    SEXY_CORS_ORIGIN: https://sexy.pivoine.art
+    SEXY_SESSION_COOKIE_DOMAIN: sexy.pivoine.art
+    SEXY_CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: https://sexy.pivoine.art
+    SEXY_USER_REGISTER_URL_ALLOW_LIST: https://sexy.pivoine.art/signup/verify
+    SEXY_PASSWORD_RESET_URL_ALLOW_LIST: https://sexy.pivoine.art/password/reset
+    # Gotify
+    GOTIFY_TRAEFIK_ENABLED: true
+    GOTIFY_COMPOSE_PROJECT_NAME: track
+    GOTIFY_IMAGE: gotify/server:latest
+    GOTIFY_TRAEFIK_HOST: gotify.pivoine.art
+    # Proxy
+    PROXY_COMPOSE_PROJECT_NAME: proxy
+    PROXY_DOCKER_IMAGE: traefik:latest
+
+scripts:
+  config: docker compose config
+  up: docker compose up -d
+  down: docker compose down
+  logs: docker compose logs -f
+  sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker.compose/
+  db/dump: |
+    PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" > sexy/directus.sql \
+    docker cp "sexy/directus.yaml" "sexy_api:/directus/directus.yaml" \
+    docker exec "sexy_api" npx directus schema apply /directus/directus.yaml \
+  db/import: |
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c \
+        "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${DB_NAME}' AND pid <> pg_backend_pid();" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c "CREATE DATABASE ${DB_NAME};" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -f "sexy/directus.sql" \
+    docker exec "sexy_api" npx directus schema snapshot "/directus/directus.yaml" \
+    docker cp "sexy_api:/directus/directus.yaml" "sexy/directus.yaml"
+  net: docker network create "$NETWORK_NAME"

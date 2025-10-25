@@ -1,0 +1,59 @@
+services:
+  traefik:
+    image: ${PROXY_DOCKER_IMAGE}
+    container_name: ${PROXY_COMPOSE_PROJECT_NAME}_app
+    restart: unless-stopped
+    command:
+      # API & Dashboard
+      - '--api.dashboard=false'
+      - '--api.insecure=false'
+      
+      # Logging
+      - '--log.level=${PROXY_LOG_LEVEL:-INFO}'
+      - '--accesslog=true'
+      
+      # Global
+      - '--global.sendAnonymousUsage=false'
+      - '--global.checkNewVersion=true'
+      
+      # Docker Provider
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--providers.docker.network=compose_network'
+      
+      # File Provider for dynamic configuration
+      # - '--providers.file.directory=/etc/traefik/dynamic'
+      # - '--providers.file.watch=true'
+      
+      # Entrypoints
+      - '--entrypoints.web.address=:${PROXY_PORT_HTTP:-80}'
+      - '--entrypoints.web-secure.address=:${PROXY_PORT_HTTPS:-443}'
+      
+      # Global HTTP to HTTPS redirect
+      - '--entrypoints.web.http.redirections.entryPoint.to=web-secure'
+      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
+      - '--entrypoints.web.http.redirections.entryPoint.permanent=true'
+      
+      # Let's Encrypt
+      - '--certificatesresolvers.resolver.acme.tlschallenge=true'
+      - '--certificatesresolvers.resolver.acme.email=${ADMIN_EMAIL}'
+      - '--certificatesresolvers.resolver.acme.storage=/letsencrypt/acme.json'
+    
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    
+    networks:
+      - compose_network
+    
+    ports:
+      - "${PROXY_PORT_HTTP:-80}:80"
+      - "${PROXY_PORT_HTTPS:-443}:443"
+    
+    volumes:
+      - /var/local/data/traefik/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
