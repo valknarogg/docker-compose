@@ -27,13 +27,8 @@ envs:
     TRACK_TRAEFIK_ENABLED: true
     TRACK_COMPOSE_PROJECT_NAME: track
     TRACK_DOCKER_IMAGE: ghcr.io/umami-software/umami:postgresql-latest
-    TRACK_TRAEFIK_HOST: track.pivoine.art
+    TRACK_TRAEFIK_HOST: umami.pivoine.art
     TRACK_DB_NAME: umami
-    # Blog
-    BLOG_TRAEFIK_ENABLED: true
-    BLOG_COMPOSE_PROJECT_NAME: blog
-    BLOG_DOCKER_IMAGE: joseluisq/static-web-server:latest
-    BLOG_TRAEFIK_HOST: pivoine.art
     # Sexy
     SEXY_TRAEFIK_ENABLED: true
     SEXY_COMPOSE_PROJECT_NAME: sexy
