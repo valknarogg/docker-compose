@@ -8,7 +8,7 @@ envs:
   default:
     # Common
     ADMIN_EMAIL: valknar@pivoine.art
-    NETWORK_NAME: pivoine
+    NETWORK_NAME: falcon_network
     TIMEZONE: Europe/Berlin
     # Core
     CORE_COMPOSE_PROJECT_NAME: core

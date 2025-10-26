@@ -50,7 +50,7 @@ services:
       - 'traefik.http.middlewares.${VPN_COMPOSE_PROJECT_NAME}-web-secure-compress.compress=true'
       - 'traefik.http.routers.${VPN_COMPOSE_PROJECT_NAME}-web-secure.middlewares=${VPN_COMPOSE_PROJECT_NAME}-web-secure-compress'
       - 'traefik.http.services.${VPN_COMPOSE_PROJECT_NAME}-web-secure.loadbalancer.server.port=51821'
-      - 'traefik.docker.network=compose_network'
+      - 'traefik.docker.network=${NETWORK_NAME}'
 
 volumes:
   etc_wireguard:

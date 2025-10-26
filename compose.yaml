@@ -8,5 +8,5 @@ include:
 
 networks:
   compose_network:
-    name: ${NETWORK_NAME:-falcon_network}
+    name: ${NETWORK_NAME}
     external: true
