@@ -1,11 +1,15 @@
 services:
-  # Awesome App - Next.js application for exploring awesome lists
-  awesome-app:
+  awesome:
     image: ${AWESOME_IMAGE:-ghcr.io/valknarness/awesome-app:latest}
     container_name: ${AWESOME_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped
     networks:
       - compose_network
+    volumes:
+      # Mount database directory for persistence
+      - ${AWESOME_DB_VOLUME:-awesome_data}:/app/data
+      # Optional: Mount a pre-existing database
+      # - ./awesome.db:/app/awesome.db:ro
     environment:
       # Node
       NODE_ENV: production
@@ -26,13 +30,6 @@ services:
 
       # Timezone
       TZ: ${TIMEZONE:-UTC}
-
-    volumes:
-      # Mount database directory for persistence
-      - ${AWESOME_DB_VOLUME:-awesome_data}:/app/data
-      # Optional: Mount a pre-existing database
-      # - ./awesome.db:/app/awesome.db:ro
-
     labels:
       - 'traefik.enable=${AWESOME_TRAEFIK_ENABLED:-true}'
       - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-app-redirect-web-secure.redirectscheme.scheme=https'
@@ -45,10 +42,10 @@ services:
       - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress.compress=true'
       - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress'
       - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.loadbalancer.server.port=3000'
-      - 'traefik.docker.network=compose_network'
+      - 'traefik.docker.network=${NETWORK_NAME}'
 
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/stats"]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/stats" ]
       interval: 30s
       timeout: 10s
       retries: 3

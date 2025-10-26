@@ -19,7 +19,7 @@ services:
       # Docker Provider
       - '--providers.docker=true'
       - '--providers.docker.exposedbydefault=false'
-      - '--providers.docker.network=compose_network'
+      - '--providers.docker.network=${NETWORK_NAME}'
       
       # File Provider for dynamic configuration
       # - '--providers.file.directory=/etc/traefik/dynamic'
