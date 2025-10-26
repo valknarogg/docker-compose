@@ -54,6 +54,9 @@ services:
       - "${PROXY_PORT_HTTPS:-443}:443"
     
     volumes:
-      - /var/local/data/traefik/letsencrypt:/letsencrypt
+      - letsencrypt_data:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./dynamic:/etc/traefik/dynamic:ro
+volumes:
+  letsencrypt_data:
+    name: ${PROXY_COMPOSE_PROJECT_NAME}_letsencrypt_data
