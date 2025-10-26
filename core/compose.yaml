@@ -11,6 +11,8 @@ services:
       # Performance tuning
       POSTGRES_MAX_CONNECTIONS: ${CORE_POSTGRES_MAX_CONNECTIONS:-100}
       POSTGRES_SHARED_BUFFERS: ${CORE_POSTGRES_SHARED_BUFFERS:-256MB}
+    ports:
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d:ro
