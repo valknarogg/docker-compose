@@ -85,4 +85,4 @@ scripts:
     docker cp "sexy/uploads" "sexy_api:/directus"
   net/create: docker network create "$NETWORK_NAME"
   awsm/import: |
-    docker cp "awsm/awesome.db/*" "awesome_app:/app/data"
+    docker cp "awsm/awesome.db" "awesome_app:/app/data"
