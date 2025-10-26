@@ -74,4 +74,9 @@ scripts:
     PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" -f "sexy/directus.sql"; \
     docker cp "sexy/directus.yaml" "sexy_api:/directus/directus.yaml"; \
     docker exec "sexy_api" npx directus schema apply /directus/directus.yaml \
+  uploads/export: |
+    rm -rf sexy/uploads
+    docker cp "sexy_api:/directus/uploads" "sexy/uploads"
+  uploads/import: |
+    docker cp "sexy/uploads/**/*" "sexy_api:/directus/uploads"
   net: docker network create "$NETWORK_NAME"
