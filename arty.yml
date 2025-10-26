@@ -86,5 +86,6 @@ scripts:
     docker cp "sexy/uploads" "sexy_api:/directus"
   net/create: docker network create "$NETWORK_NAME"
   awsm/import: |
-    docker cp "awsm/awesome.db/awesome.db" "awesome_app:/home/node/.awesome"
-    docker cp "awsm/awesome.db/db-metadata.json" "awesome_app:/home/node/.awesome"
+    artifact_github_download.sh valknarness/awesome-app -n awesome-database -o /tmp
+    docker cp "/tmp/awesome-database/awesome.db" "awesome_app:/home/node/.awesome/awesome.db"
+    docker cp "/tmp/awesome-database/db-metadata.json" "awesome_app:/home/node/.awesome/db-metadata.json"
