@@ -25,7 +25,7 @@ services:
       - 'traefik.http.middlewares.${GOTIFY_COMPOSE_PROJECT_NAME}-gotify-web-secure-compress.compress=true'
       - 'traefik.http.routers.${GOTIFY_COMPOSE_PROJECT_NAME}-gotify-web-secure.middlewares=${GOTIFY_COMPOSE_PROJECT_NAME}-gotify-web-secure-compress'
       - 'traefik.http.services.${GOTIFY_COMPOSE_PROJECT_NAME}-gotify-web-secure.loadbalancer.server.port=80'
-      - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'traefik.docker.network=compose_network'
 
 volumes:
   gotify_data:

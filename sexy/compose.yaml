@@ -54,7 +54,7 @@ services:
       - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-api-strip.stripprefix.prefixes=/api'
       - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-api-strip,${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure-compress'
       - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.loadbalancer.server.port=8055'
-      - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'traefik.docker.network=compose_network'
 
   frontend:
     image: ${SEXY_FRONTEND_IMAGE}
@@ -85,7 +85,7 @@ services:
       - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure-compress.compress=true'
       - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure-compress'
       - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.loadbalancer.server.port=3000'
-      - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'traefik.docker.network=compose_network'
 
 volumes:
   directus_uploads:

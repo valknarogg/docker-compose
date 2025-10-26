@@ -41,4 +41,4 @@ services:
       - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.tls.certresolver=resolver'
       - 'traefik.http.routers.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.entrypoints=web-secure'
       - 'traefik.http.services.${TRACK_COMPOSE_PROJECT_NAME}-web-secure.loadbalancer.server.port=3000'
-      - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'traefik.docker.network=compose_network'
