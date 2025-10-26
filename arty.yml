@@ -87,5 +87,4 @@ scripts:
   net/create: docker network create "$NETWORK_NAME"
   awsm/import: |
     artifact_github_download.sh valknarness/awesome-app -n awesome-database -o /tmp
-    docker cp "/tmp/awesome-database/awesome.db" "awesome_app:/home/node/.awesome/awesome.db"
-    docker cp "/tmp/awesome-database/db-metadata.json" "awesome_app:/home/node/.awesome/db-metadata.json"
+    docker cp "/tmp/awesome-database" "awesome_app:/home/node/.awesome"
