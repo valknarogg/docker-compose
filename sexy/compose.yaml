@@ -1,0 +1,91 @@
+services:
+  directus:
+    image: ${SEXY_DIRECTUS_IMAGE}
+    container_name: ${SEXY_COMPOSE_PROJECT_NAME}_api
+    restart: unless-stopped
+    networks:
+      - compose_network
+    volumes:
+      - ${SEXY_DIRECTUS_UPLOADS:-directus_uploads}:/directus/uploads
+      - ${SEXY_DIRECTUS_BUNDLE:-directus_bundle}:/directus/extensions/sexy.pivoine.art
+    environment:
+      TZ: ${TIMEZONE:-Europe/Amsterdam}
+      SECRET: ${SEXY_DIRECTUS_SECRET}
+      DB_CLIENT: pg
+      DB_HOST: ${CORE_DB_HOST}
+      DB_PORT: ${CORE_DB_PORT}
+      DB_DATABASE: ${SEXY_DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CACHE_ENABLED: ${SEXY_CACHE_ENABLED:-true}
+      CACHE_AUTO_PURGE: ${SEXY_CACHE_AUTO_PURGE:-true}
+      CACHE_STORE: redis
+      REDIS: redis://${CORE_REDIS_HOST}:${CORE_REDIS_PORT}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      WEBSOCKETS_ENABLED: ${SEXY_WEBSOCKETS_ENABLED:-true}
+      PUBLIC_URL: ${SEXY_PUBLIC_URL}
+      CORS_ENABLED: ${SEXY_CORS_ENABLED:-true}
+      CORS_ORIGIN: ${SEXY_CORS_ORIGIN}
+      SESSION_COOKIE_SECURE: ${SEXY_SESSION_COOKIE_SECURE:-true}
+      SESSION_COOKIE_SAME_SITE: ${SEXY_SESSION_COOKIE_SAME_SITE:-strict}
+      SESSION_COOKIE_DOMAIN: ${SEXY_SESSION_COOKIE_DOMAIN}
+      EXTENSIONS_PATH: ${SEXY_EXTENSIONS_PATH:-./extensions}
+      EXTENSIONS_AUTO_RELOAD: ${SEXY_EXTENSIONS_AUTO_RELOAD:-false}
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: ${SEXY_CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC}
+      EMAIL_TRANSPORT: ${EMAIL_TRANSPORT}
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST}
+      EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT}
+      EMAIL_SMTP_USER: ${EMAIL_SMTP_USER}
+      EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD}
+      USER_REGISTER_URL_ALLOW_LIST: ${SEXY_USER_REGISTER_URL_ALLOW_LIST}
+      PASSWORD_RESET_URL_ALLOW_LIST: ${SEXY_PASSWORD_RESET_URL_ALLOW_LIST}
+    labels:
+      - 'traefik.enable=${SEXY_TRAEFIK_ENABLED:-true}'
+      - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-api-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-api-redirect-web-secure'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web.rule=Host(`${SEXY_TRAEFIK_HOST}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web.entrypoints=web'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.rule=Host(`${SEXY_TRAEFIK_HOST}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.entrypoints=web-secure'
+      - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure-compress.compress=true'
+      - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-api-strip.stripprefix.prefixes=/api'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-api-strip,${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure-compress'
+      - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.loadbalancer.server.port=8055'
+      - 'traefik.docker.network=compose_network'
+
+  frontend:
+    image: ${SEXY_FRONTEND_IMAGE}
+    container_name: ${SEXY_COMPOSE_PROJECT_NAME}_frontend
+    restart: unless-stopped
+    user: node
+    working_dir: /home/node/app/packages/frontend
+    networks:
+      - compose_network
+    environment:
+      TZ: ${TIMEZONE:-Europe/Amsterdam}
+      NODE_ENV: production
+    volumes:
+      - ${SEXY_DIRECTUS_BUNDLE:-directus_bundle}:/home/node/app/packages/bundle
+    command: ["node", "build/index.js"]
+    labels:
+      - 'traefik.enable=${SEXY_TRAEFIK_ENABLED:-true}'
+      - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-frontend-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-frontend-redirect-web-secure'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web.rule=Host(`${SEXY_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web.entrypoints=web'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.rule=Host(`${SEXY_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.entrypoints=web-secure'
+      - 'traefik.http.middlewares.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure-compress.compress=true'
+      - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure-compress'
+      - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.loadbalancer.server.port=3000'
+      - 'traefik.docker.network=compose_network'
+
+volumes:
+  directus_uploads:
+    name: ${CORE_COMPOSE_PROJECT_NAME}_directus_uploads
+  directus_bundle:
+    name: ${CORE_COMPOSE_PROJECT_NAME}_directus_bundle

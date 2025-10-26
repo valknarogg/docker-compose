@@ -39,7 +39,7 @@ envs:
     SEXY_COMPOSE_PROJECT_NAME: sexy
     SEXY_TRAEFIK_HOST: sexy.pivoine.art
     SEXY_DIRECTUS_IMAGE: directus/directus:11.12.0
-    SEXY_FRONTEND_IMAGE: node:22
+    SEXY_FRONTEND_IMAGE: ghcr.io/valknarxxx/sexy:latest
     SEXY_DB_NAME: directus
     SEXY_PUBLIC_URL: https://sexy.pivoine.art/api
     SEXY_CORS_ORIGIN: https://sexy.pivoine.art
