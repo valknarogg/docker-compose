@@ -43,14 +43,6 @@ services:
       - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress'
       - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.loadbalancer.server.port=3000'
       - 'traefik.docker.network=${NETWORK_NAME}'
-
-    healthcheck:
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/stats" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
 volumes:
   awesome_data:
     name: ${AWESOME_COMPOSE_PROJECT_NAME}_data
