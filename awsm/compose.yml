@@ -1,0 +1,68 @@
+services:
+  # Awesome App - Next.js application for exploring awesome lists
+  awesome-app:
+    image: ${AWESOME_IMAGE:-ghcr.io/valknarness/awesome-app:latest}
+    container_name: ${AWESOME_COMPOSE_PROJECT_NAME:-awesome}_app
+    restart: unless-stopped
+    networks:
+      - compose_network
+    environment:
+      # Node
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+      # Next.js
+      NEXT_TELEMETRY_DISABLED: ${NEXT_TELEMETRY_DISABLED:-1}
+
+      # Database path
+      AWESOME_DB_PATH: ${AWESOME_DB_PATH:-/app/awesome.db}
+
+      # Optional: Webhook secret for database updates
+      WEBHOOK_SECRET: ${AWESOME_WEBHOOK_SECRET:-}
+
+      # Optional: GitHub token for rate limits
+      GITHUB_TOKEN: ${AWESOME_GITHUB_TOKEN:-}
+
+      # Timezone
+      TZ: ${TIMEZONE:-UTC}
+
+    volumes:
+      # Mount database directory for persistence
+      - ${AWESOME_DB_VOLUME:-awesome_data}:/app/data
+      # Optional: Mount a pre-existing database
+      # - ./awesome.db:/app/awesome.db:ro
+
+    labels:
+      # Traefik labels for reverse proxy
+      - 'traefik.enable=${AWESOME_TRAEFIK_ENABLED:-true}'
+
+      # HTTP to HTTPS redirect
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.middlewares=${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-redirect-web-secure'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.entrypoints=web'
+
+      # HTTPS configuration
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.entrypoints=web-secure'
+
+      # Compression middleware
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-compress.compress=true'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-compress'
+
+      # Load balancer configuration
+      - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.loadbalancer.server.port=3000'
+      - 'traefik.docker.network=compose_network'
+
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  awesome_data:
+    name: ${AWESOME_COMPOSE_PROJECT_NAME:-awesome}_data

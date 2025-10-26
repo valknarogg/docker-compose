@@ -29,6 +29,10 @@ envs:
     TRACK_DOCKER_IMAGE: ghcr.io/umami-software/umami:postgresql-latest
     TRACK_TRAEFIK_HOST: umami.pivoine.art
     TRACK_DB_NAME: umami
+    # AWSM
+    AWESOME_TRAEFIK_ENABLED: true
+    AWESOME_COMPOSE_PROJECT_NAME: awesome
+    AWESOME_TRAEFIK_HOST: awesome.pivoine.art
     # Sexy
     SEXY_TRAEFIK_ENABLED: true
     SEXY_COMPOSE_PROJECT_NAME: sexy

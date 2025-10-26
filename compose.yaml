@@ -1,6 +1,7 @@
 name: falcon
 include:
   - core/compose.yaml
+  - awsm/compose.yaml
   - sexy/compose.yaml
   - gotify/compose.yaml
   - track/compose.yaml
