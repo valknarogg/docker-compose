@@ -56,7 +56,9 @@ scripts:
   up: docker compose up -d
   down: docker compose down
   logs: docker compose logs -f
-  sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker-compose/
+  restart: docker compose restart
+  ps: docker compose ps
+  env/sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker-compose/
   db/dump: |
     PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" > sexy/directus.sql; \
     docker exec "sexy_api" npx directus schema snapshot "/directus/directus.yaml"; \
@@ -74,4 +76,4 @@ scripts:
     docker cp "sexy_api:/directus/uploads" "sexy/uploads"
   uploads/import: |
     docker cp "sexy/uploads" "sexy_api:/directus"
-  net: docker network create "$NETWORK_NAME"
+  net/create: docker network create "$NETWORK_NAME"
