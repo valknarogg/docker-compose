@@ -50,7 +50,7 @@ envs:
     SEXY_FRONTEND_PUBLIC_URL: https://sexy.pivoine.art
     # Gotify
     GOTIFY_TRAEFIK_ENABLED: true
-    GOTIFY_COMPOSE_PROJECT_NAME: track
+    GOTIFY_COMPOSE_PROJECT_NAME: messaging
     GOTIFY_IMAGE: gotify/server:latest
     GOTIFY_TRAEFIK_HOST: gotify.pivoine.art
     # Proxy

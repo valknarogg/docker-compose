@@ -34,26 +34,17 @@ services:
       # - ./awesome.db:/app/awesome.db:ro
 
     labels:
-      # Traefik labels for reverse proxy
       - 'traefik.enable=${AWESOME_TRAEFIK_ENABLED:-true}'
-
-      # HTTP to HTTPS redirect
-      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-redirect-web-secure.redirectscheme.scheme=https'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-redirect-web-secure'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.entrypoints=web'
-
-      # HTTPS configuration
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.tls.certresolver=resolver'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.entrypoints=web-secure'
-
-      # Compression middleware
-      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-compress.compress=true'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-compress'
-
-      # Load balancer configuration
-      - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.loadbalancer.server.port=3000'
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-app-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-app-redirect-web-secure'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web.entrypoints=web'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.entrypoints=web-secure'
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress.compress=true'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress'
+      - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.loadbalancer.server.port=3000'
       - 'traefik.docker.network=${NETWORK_NAME}'
 
     healthcheck:
