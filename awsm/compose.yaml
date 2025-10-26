@@ -2,7 +2,7 @@ services:
   # Awesome App - Next.js application for exploring awesome lists
   awesome-app:
     image: ${AWESOME_IMAGE:-ghcr.io/valknarness/awesome-app:latest}
-    container_name: ${AWESOME_COMPOSE_PROJECT_NAME:-awesome}_app
+    container_name: ${AWESOME_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped
     networks:
       - compose_network
@@ -38,22 +38,22 @@ services:
       - 'traefik.enable=${AWESOME_TRAEFIK_ENABLED:-true}'
 
       # HTTP to HTTPS redirect
-      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-redirect-web-secure.redirectscheme.scheme=https'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.middlewares=${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-redirect-web-secure'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web.entrypoints=web'
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-redirect-web-secure.redirectscheme.scheme=https'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-redirect-web-secure'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web.entrypoints=web'
 
       # HTTPS configuration
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.tls.certresolver=resolver'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.entrypoints=web-secure'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.rule=Host(`${AWESOME_TRAEFIK_HOST}`)'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.tls.certresolver=resolver'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.entrypoints=web-secure'
 
       # Compression middleware
-      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-compress.compress=true'
-      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-compress'
+      - 'traefik.http.middlewares.${AWESOME_COMPOSE_PROJECT_NAME}-compress.compress=true'
+      - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-compress'
 
       # Load balancer configuration
-      - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME:-awesome}-web-secure.loadbalancer.server.port=3000'
+      - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-web-secure.loadbalancer.server.port=3000'
       - 'traefik.docker.network=${NETWORK_NAME}'
 
     healthcheck:
@@ -65,4 +65,4 @@ services:
 
 volumes:
   awesome_data:
-    name: ${AWESOME_COMPOSE_PROJECT_NAME:-awesome}_data
+    name: ${AWESOME_COMPOSE_PROJECT_NAME}_data
