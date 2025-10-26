@@ -63,15 +63,15 @@ scripts:
   logs: docker compose logs -f
   sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker.compose/
   db/dump: |
-    PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" > sexy/directus.sql \
+    PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" > sexy/directus.sql \
     docker cp "sexy/directus.yaml" "sexy_api:/directus/directus.yaml" \
     docker exec "sexy_api" npx directus schema apply /directus/directus.yaml \
   db/import: |
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c \
-        "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${DB_NAME}' AND pid <> pg_backend_pid();" \
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" \
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d postgres -c "CREATE DATABASE ${DB_NAME};" \
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -f "sexy/directus.sql" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d postgres -c \
+        "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${SEXY_DB_NAME}' AND pid <> pg_backend_pid();" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d postgres -c "DROP DATABASE IF EXISTS ${SEXY_DB_NAME};" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d postgres -c "CREATE DATABASE ${SEXY_DB_NAME};" \
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" -f "sexy/directus.sql" \
     docker exec "sexy_api" npx directus schema snapshot "/directus/directus.yaml" \
     docker cp "sexy_api:/directus/directus.yaml" "sexy/directus.yaml"
   net: docker network create "$NETWORK_NAME"
