@@ -65,7 +65,7 @@ scripts:
   restart: docker compose restart
   ps: docker compose ps
   pull: docker compose pull
-  exec: docker compose exec -it
+  run: docker compose exec -it
   env/sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker-compose/
   db/dump: |
     PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" > sexy/directus.sql; \
