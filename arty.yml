@@ -78,5 +78,5 @@ scripts:
     rm -rf sexy/uploads
     docker cp "sexy_api:/directus/uploads" "sexy/uploads"
   uploads/import: |
-    docker cp "sexy/uploads/*" "sexy_api:/directus/uploads"
+    docker cp "sexy/uploads" "sexy_api:/directus"
   net: docker network create "$NETWORK_NAME"
