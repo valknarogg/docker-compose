@@ -21,7 +21,7 @@ services:
       NEXT_TELEMETRY_DISABLED: ${NEXT_TELEMETRY_DISABLED:-1}
 
       # Database path
-      AWESOME_DB_PATH: ${AWESOME_DB_PATH:-/app/awesome.db}
+      # AWESOME_DB_PATH: ${AWESOME_DB_PATH:-/app/awesome.db}
 
       # Optional: Webhook secret for database updates
       WEBHOOK_SECRET: ${AWESOME_WEBHOOK_SECRET:-}
