@@ -7,7 +7,7 @@ services:
       - compose_network
     volumes:
       # Mount database directory for persistence
-      - ${AWESOME_DB_VOLUME:-awesome_data}:/app/data
+      - ${AWESOME_DB_VOLUME:-awesome_data}:/home/node/.awesome
       # Optional: Mount a pre-existing database
       # - ./awesome.db:/app/awesome.db:ro
     environment:
