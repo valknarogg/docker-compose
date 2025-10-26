@@ -42,6 +42,8 @@ envs:
     SEXY_CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: https://sexy.pivoine.art
     SEXY_USER_REGISTER_URL_ALLOW_LIST: https://sexy.pivoine.art/signup/verify
     SEXY_PASSWORD_RESET_URL_ALLOW_LIST: https://sexy.pivoine.art/password/reset
+    SEXY_FRONTEND_PUBLIC_API_URL: https://sexy.pivoine.art/api
+    SEXY_FRONTEND_PUBLIC_URL: https://sexy.pivoine.art
     # Gotify
     GOTIFY_TRAEFIK_ENABLED: true
     GOTIFY_COMPOSE_PROJECT_NAME: track

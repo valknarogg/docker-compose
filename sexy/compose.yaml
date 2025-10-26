@@ -67,6 +67,9 @@ services:
     environment:
       TZ: ${TIMEZONE:-Europe/Amsterdam}
       NODE_ENV: production
+      PUBLIC_API_URL: ${SEXY_FRONTEND_PUBLIC_API_URL:-http://localhost:8055/api}
+      PUBLIC_URL: ${SEXY_FRONTEND_PUBLIC_URL:-http://localhost:3000}
+      PUBLIC_UMAMI_ID: ${SEXY_FRONTEND_PUBLIC_UMAMI_ID:-}
     volumes:
       - ${SEXY_DIRECTUS_BUNDLE:-directus_bundle}:/home/node/app/packages/bundle
     command: ["node", "build/index.js"]
