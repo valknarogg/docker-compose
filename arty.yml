@@ -69,7 +69,7 @@ scripts:
   env/sync: rsync -avzhe ssh ./.env root@vps:~/Projects/docker-compose/
   db/dump: |
     PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" > sexy/directus.sql; \
-    docker exec "sexy_api" npx directus schema snapshot "/directus/directus.yaml"; \
+    docker exec -it "sexy_api" npx directus schema snapshot "/directus/directus.yaml"; \
     docker cp "sexy/directus.yaml" "sexy_api:/directus/directus.yaml"
   db/import: |
     PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d postgres -c \
@@ -78,7 +78,7 @@ scripts:
     PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d postgres -c "CREATE DATABASE ${SEXY_DB_NAME};"; \
     PGPASSWORD="${DB_PASSWORD}" psql -h "${CORE_DB_HOST}" -p "${CORE_DB_PORT}" -U "${DB_USER}" -d "${SEXY_DB_NAME}" -f "sexy/directus.sql"; \
     docker cp "sexy/directus.yaml" "sexy_api:/directus/directus.yaml"; \
-    docker exec "sexy_api" npx directus schema apply /directus/directus.yaml \
+    docker exec -it "sexy_api" npx directus schema apply /directus/directus.yaml \
   uploads/export: |
     rm -rf sexy/uploads
     docker cp "sexy_api:/directus/uploads" "sexy/uploads"
