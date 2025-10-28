@@ -2,14 +2,15 @@
 -- PostgreSQL database dump
 --
 
-\restrict tAmOMYhnzidh4M1vxfBPwLdhU0fgoXK50QLIHhVGSjxWfBKUxdywslE1xqkN7nq
+\restrict kHaSmq4pzphfyKS1cgbEfBxXPPJEZNokzfZYTVTz0MdM9wEWRpxGHentE1L9eUf
 
--- Dumped from database version 16.10
--- Dumped by pg_dump version 16.10
+-- Dumped from database version 18.0 (Debian 18.0-1.pgdg13+3)
+-- Dumped by pg_dump version 18.0 (Debian 18.0-1.pgdg13+3)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -19,28 +20,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON SCHEMA public IS '';
-
-
---
--- Name: topology; Type: SCHEMA; Schema: -; Owner: -
+-- Name: topology; Type: SCHEMA; Schema: -; Owner: valknar
 --
 
 CREATE SCHEMA topology;
 
 
+ALTER SCHEMA topology OWNER TO valknar;
+
 --
--- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: valknar
 --
 
 COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
@@ -54,14 +43,14 @@ CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
 
 
 --
--- Name: st_asbinary(text); Type: FUNCTION; Schema: public; Owner: -
+-- Name: st_asbinary(text); Type: FUNCTION; Schema: public; Owner: valknar
 --
 
 CREATE FUNCTION public.st_asbinary(text) RETURNS bytea
@@ -69,8 +58,10 @@ CREATE FUNCTION public.st_asbinary(text) RETURNS bytea
     AS $_$ SELECT ST_AsBinary($1::geometry);$_$;
 
 
+ALTER FUNCTION public.st_asbinary(text) OWNER TO valknar;
+
 --
--- Name: st_astext(bytea); Type: FUNCTION; Schema: public; Owner: -
+-- Name: st_astext(bytea); Type: FUNCTION; Schema: public; Owner: valknar
 --
 
 CREATE FUNCTION public.st_astext(bytea) RETURNS text
@@ -78,19 +69,23 @@ CREATE FUNCTION public.st_astext(bytea) RETURNS text
     AS $_$ SELECT ST_AsText($1::geometry);$_$;
 
 
+ALTER FUNCTION public.st_astext(bytea) OWNER TO valknar;
+
 --
--- Name: gist_geometry_ops; Type: OPERATOR FAMILY; Schema: public; Owner: -
+-- Name: gist_geometry_ops; Type: OPERATOR FAMILY; Schema: public; Owner: valknar
 --
 
 CREATE OPERATOR FAMILY public.gist_geometry_ops USING gist;
 
+
+ALTER OPERATOR FAMILY public.gist_geometry_ops USING gist OWNER TO valknar;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: directus_access; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_access; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_access (
@@ -102,8 +97,10 @@ CREATE TABLE public.directus_access (
 );
 
 
+ALTER TABLE public.directus_access OWNER TO valknar;
+
 --
--- Name: directus_activity; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_activity; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_activity (
@@ -119,8 +116,10 @@ CREATE TABLE public.directus_activity (
 );
 
 
+ALTER TABLE public.directus_activity OWNER TO valknar;
+
 --
--- Name: directus_activity_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_activity_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_activity_id_seq
@@ -132,15 +131,17 @@ CREATE SEQUENCE public.directus_activity_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_activity_id_seq OWNER TO valknar;
+
 --
--- Name: directus_activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_activity_id_seq OWNED BY public.directus_activity.id;
 
 
 --
--- Name: directus_collections; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_collections; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_collections (
@@ -167,8 +168,10 @@ CREATE TABLE public.directus_collections (
 );
 
 
+ALTER TABLE public.directus_collections OWNER TO valknar;
+
 --
--- Name: directus_comments; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_comments; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_comments (
@@ -183,8 +186,10 @@ CREATE TABLE public.directus_comments (
 );
 
 
+ALTER TABLE public.directus_comments OWNER TO valknar;
+
 --
--- Name: directus_dashboards; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_dashboards; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_dashboards (
@@ -198,8 +203,10 @@ CREATE TABLE public.directus_dashboards (
 );
 
 
+ALTER TABLE public.directus_dashboards OWNER TO valknar;
+
 --
--- Name: directus_extensions; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_extensions; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_extensions (
@@ -211,8 +218,10 @@ CREATE TABLE public.directus_extensions (
 );
 
 
+ALTER TABLE public.directus_extensions OWNER TO valknar;
+
 --
--- Name: directus_fields; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_fields; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_fields (
@@ -238,8 +247,10 @@ CREATE TABLE public.directus_fields (
 );
 
 
+ALTER TABLE public.directus_fields OWNER TO valknar;
+
 --
--- Name: directus_fields_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_fields_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_fields_id_seq
@@ -251,15 +262,17 @@ CREATE SEQUENCE public.directus_fields_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_fields_id_seq OWNER TO valknar;
+
 --
--- Name: directus_fields_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_fields_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_fields_id_seq OWNED BY public.directus_fields.id;
 
 
 --
--- Name: directus_files; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_files; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_files (
@@ -292,8 +305,10 @@ CREATE TABLE public.directus_files (
 );
 
 
+ALTER TABLE public.directus_files OWNER TO valknar;
+
 --
--- Name: directus_flows; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_flows; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_flows (
@@ -312,8 +327,10 @@ CREATE TABLE public.directus_flows (
 );
 
 
+ALTER TABLE public.directus_flows OWNER TO valknar;
+
 --
--- Name: directus_folders; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_folders; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_folders (
@@ -323,8 +340,10 @@ CREATE TABLE public.directus_folders (
 );
 
 
+ALTER TABLE public.directus_folders OWNER TO valknar;
+
 --
--- Name: directus_migrations; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_migrations; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_migrations (
@@ -334,8 +353,10 @@ CREATE TABLE public.directus_migrations (
 );
 
 
+ALTER TABLE public.directus_migrations OWNER TO valknar;
+
 --
--- Name: directus_notifications; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_notifications; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_notifications (
@@ -351,8 +372,10 @@ CREATE TABLE public.directus_notifications (
 );
 
 
+ALTER TABLE public.directus_notifications OWNER TO valknar;
+
 --
--- Name: directus_notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_notifications_id_seq
@@ -364,15 +387,17 @@ CREATE SEQUENCE public.directus_notifications_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_notifications_id_seq OWNER TO valknar;
+
 --
--- Name: directus_notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_notifications_id_seq OWNED BY public.directus_notifications.id;
 
 
 --
--- Name: directus_operations; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_operations; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_operations (
@@ -391,8 +416,10 @@ CREATE TABLE public.directus_operations (
 );
 
 
+ALTER TABLE public.directus_operations OWNER TO valknar;
+
 --
--- Name: directus_panels; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_panels; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_panels (
@@ -414,8 +441,10 @@ CREATE TABLE public.directus_panels (
 );
 
 
+ALTER TABLE public.directus_panels OWNER TO valknar;
+
 --
--- Name: directus_permissions; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_permissions; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_permissions (
@@ -430,8 +459,10 @@ CREATE TABLE public.directus_permissions (
 );
 
 
+ALTER TABLE public.directus_permissions OWNER TO valknar;
+
 --
--- Name: directus_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_permissions_id_seq
@@ -443,15 +474,17 @@ CREATE SEQUENCE public.directus_permissions_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_permissions_id_seq OWNER TO valknar;
+
 --
--- Name: directus_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_permissions_id_seq OWNED BY public.directus_permissions.id;
 
 
 --
--- Name: directus_policies; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_policies; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_policies (
@@ -466,8 +499,10 @@ CREATE TABLE public.directus_policies (
 );
 
 
+ALTER TABLE public.directus_policies OWNER TO valknar;
+
 --
--- Name: directus_presets; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_presets; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_presets (
@@ -487,8 +522,10 @@ CREATE TABLE public.directus_presets (
 );
 
 
+ALTER TABLE public.directus_presets OWNER TO valknar;
+
 --
--- Name: directus_presets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_presets_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_presets_id_seq
@@ -500,15 +537,17 @@ CREATE SEQUENCE public.directus_presets_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_presets_id_seq OWNER TO valknar;
+
 --
--- Name: directus_presets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_presets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_presets_id_seq OWNED BY public.directus_presets.id;
 
 
 --
--- Name: directus_relations; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_relations; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_relations (
@@ -525,8 +564,10 @@ CREATE TABLE public.directus_relations (
 );
 
 
+ALTER TABLE public.directus_relations OWNER TO valknar;
+
 --
--- Name: directus_relations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_relations_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_relations_id_seq
@@ -538,15 +579,17 @@ CREATE SEQUENCE public.directus_relations_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_relations_id_seq OWNER TO valknar;
+
 --
--- Name: directus_relations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_relations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_relations_id_seq OWNED BY public.directus_relations.id;
 
 
 --
--- Name: directus_revisions; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_revisions; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_revisions (
@@ -561,8 +604,10 @@ CREATE TABLE public.directus_revisions (
 );
 
 
+ALTER TABLE public.directus_revisions OWNER TO valknar;
+
 --
--- Name: directus_revisions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_revisions_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_revisions_id_seq
@@ -574,15 +619,17 @@ CREATE SEQUENCE public.directus_revisions_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_revisions_id_seq OWNER TO valknar;
+
 --
--- Name: directus_revisions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_revisions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_revisions_id_seq OWNED BY public.directus_revisions.id;
 
 
 --
--- Name: directus_roles; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_roles; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_roles (
@@ -594,8 +641,10 @@ CREATE TABLE public.directus_roles (
 );
 
 
+ALTER TABLE public.directus_roles OWNER TO valknar;
+
 --
--- Name: directus_sessions; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_sessions; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_sessions (
@@ -610,8 +659,10 @@ CREATE TABLE public.directus_sessions (
 );
 
 
+ALTER TABLE public.directus_sessions OWNER TO valknar;
+
 --
--- Name: directus_settings; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_settings; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_settings (
@@ -659,8 +710,10 @@ CREATE TABLE public.directus_settings (
 );
 
 
+ALTER TABLE public.directus_settings OWNER TO valknar;
+
 --
--- Name: directus_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_settings_id_seq
@@ -672,15 +725,17 @@ CREATE SEQUENCE public.directus_settings_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_settings_id_seq OWNER TO valknar;
+
 --
--- Name: directus_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_settings_id_seq OWNED BY public.directus_settings.id;
 
 
 --
--- Name: directus_shares; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_shares; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_shares (
@@ -699,8 +754,10 @@ CREATE TABLE public.directus_shares (
 );
 
 
+ALTER TABLE public.directus_shares OWNER TO valknar;
+
 --
--- Name: directus_translations; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_translations; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_translations (
@@ -711,8 +768,10 @@ CREATE TABLE public.directus_translations (
 );
 
 
+ALTER TABLE public.directus_translations OWNER TO valknar;
+
 --
--- Name: directus_users; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_users; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_users (
@@ -752,8 +811,10 @@ CREATE TABLE public.directus_users (
 );
 
 
+ALTER TABLE public.directus_users OWNER TO valknar;
+
 --
--- Name: directus_versions; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_versions; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_versions (
@@ -771,8 +832,10 @@ CREATE TABLE public.directus_versions (
 );
 
 
+ALTER TABLE public.directus_versions OWNER TO valknar;
+
 --
--- Name: directus_webhooks; Type: TABLE; Schema: public; Owner: -
+-- Name: directus_webhooks; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.directus_webhooks (
@@ -790,8 +853,10 @@ CREATE TABLE public.directus_webhooks (
 );
 
 
+ALTER TABLE public.directus_webhooks OWNER TO valknar;
+
 --
--- Name: directus_webhooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directus_webhooks_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.directus_webhooks_id_seq
@@ -803,15 +868,17 @@ CREATE SEQUENCE public.directus_webhooks_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.directus_webhooks_id_seq OWNER TO valknar;
+
 --
--- Name: directus_webhooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: directus_webhooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.directus_webhooks_id_seq OWNED BY public.directus_webhooks.id;
 
 
 --
--- Name: junction_directus_users_files; Type: TABLE; Schema: public; Owner: -
+-- Name: junction_directus_users_files; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.junction_directus_users_files (
@@ -821,8 +888,10 @@ CREATE TABLE public.junction_directus_users_files (
 );
 
 
+ALTER TABLE public.junction_directus_users_files OWNER TO valknar;
+
 --
--- Name: junction_directus_users_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: junction_directus_users_files_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.junction_directus_users_files_id_seq
@@ -834,54 +903,17 @@ CREATE SEQUENCE public.junction_directus_users_files_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.junction_directus_users_files_id_seq OWNER TO valknar;
+
 --
--- Name: junction_directus_users_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: junction_directus_users_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.junction_directus_users_files_id_seq OWNED BY public.junction_directus_users_files.id;
 
 
 --
--- Name: sexy_achievements; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_achievements (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    code character varying(50) NOT NULL,
-    name character varying(255) NOT NULL,
-    description text,
-    icon character varying(255),
-    category character varying(50) NOT NULL,
-    required_count integer,
-    points_reward integer DEFAULT 0,
-    sort integer DEFAULT 0,
-    status character varying(20) DEFAULT 'published'::character varying
-);
-
-
---
--- Name: TABLE sexy_achievements; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sexy_achievements IS 'Predefined achievement definitions for gamification';
-
-
---
--- Name: COLUMN sexy_achievements.code; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_achievements.code IS 'Unique code used in backend logic (e.g., first_recording, play_100)';
-
-
---
--- Name: COLUMN sexy_achievements.category; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_achievements.category IS 'Achievement category: recordings, playback, social, special';
-
-
---
--- Name: sexy_articles; Type: TABLE; Schema: public; Owner: -
+-- Name: sexy_articles; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.sexy_articles (
@@ -903,235 +935,10 @@ CREATE TABLE public.sexy_articles (
 );
 
 
---
--- Name: sexy_model_photos; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_model_photos (
-    id integer NOT NULL,
-    directus_users_id uuid NOT NULL,
-    directus_files_id uuid NOT NULL,
-    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    date_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP
-);
-
+ALTER TABLE public.sexy_articles OWNER TO valknar;
 
 --
--- Name: sexy_model_photos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.sexy_model_photos_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sexy_model_photos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.sexy_model_photos_id_seq OWNED BY public.sexy_model_photos.id;
-
-
---
--- Name: sexy_recording_plays; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_recording_plays (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL,
-    recording_id uuid NOT NULL,
-    duration_played integer,
-    completed boolean DEFAULT false,
-    date_created timestamp with time zone DEFAULT now(),
-    date_updated timestamp with time zone DEFAULT now()
-);
-
-
---
--- Name: TABLE sexy_recording_plays; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sexy_recording_plays IS 'Tracks user playback of recordings for analytics and gamification';
-
-
---
--- Name: COLUMN sexy_recording_plays.completed; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_recording_plays.completed IS 'True if user watched at least 90% of the recording';
-
-
---
--- Name: sexy_recordings; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_recordings (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    title character varying(255) NOT NULL,
-    description text,
-    slug character varying(255) NOT NULL,
-    duration numeric(10,2) NOT NULL,
-    events jsonb NOT NULL,
-    device_info jsonb NOT NULL,
-    tags json DEFAULT '[]'::json,
-    linked_video uuid,
-    status character varying(50) DEFAULT 'draft'::character varying,
-    public boolean DEFAULT false,
-    user_created uuid,
-    user_updated uuid,
-    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    date_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
---
--- Name: sexy_user_achievements; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_user_achievements (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL,
-    achievement_id uuid NOT NULL,
-    progress integer DEFAULT 0,
-    date_unlocked timestamp with time zone
-);
-
-
---
--- Name: TABLE sexy_user_achievements; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sexy_user_achievements IS 'Tracks which achievements users have unlocked';
-
-
---
--- Name: COLUMN sexy_user_achievements.progress; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_achievements.progress IS 'Current progress (e.g., 7/10 recordings created)';
-
-
---
--- Name: COLUMN sexy_user_achievements.date_unlocked; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_achievements.date_unlocked IS 'NULL if achievement not yet unlocked';
-
-
---
--- Name: sexy_user_points; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_user_points (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL,
-    action character varying(50) NOT NULL,
-    points integer NOT NULL,
-    recording_id uuid,
-    date_created timestamp with time zone DEFAULT now()
-);
-
-
---
--- Name: TABLE sexy_user_points; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sexy_user_points IS 'Individual point-earning actions for gamification system';
-
-
---
--- Name: COLUMN sexy_user_points.action; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_points.action IS 'Type of action: RECORDING_CREATE, RECORDING_PLAY, RECORDING_COMPLETE, COMMENT_CREATE, RECORDING_FEATURED';
-
-
---
--- Name: COLUMN sexy_user_points.points; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_points.points IS 'Raw points before time-weighted decay calculation';
-
-
---
--- Name: sexy_user_stats; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_user_stats (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL,
-    total_raw_points integer DEFAULT 0,
-    total_weighted_points numeric(10,2) DEFAULT 0,
-    recordings_count integer DEFAULT 0,
-    playbacks_count integer DEFAULT 0,
-    comments_count integer DEFAULT 0,
-    achievements_count integer DEFAULT 0,
-    last_updated timestamp with time zone DEFAULT now()
-);
-
-
---
--- Name: TABLE sexy_user_stats; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sexy_user_stats IS 'Cached user statistics for fast leaderboard queries';
-
-
---
--- Name: COLUMN sexy_user_stats.total_raw_points; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_stats.total_raw_points IS 'Sum of all points without time decay';
-
-
---
--- Name: COLUMN sexy_user_stats.total_weighted_points; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_stats.total_weighted_points IS 'Time-weighted score using exponential decay (λ=0.005)';
-
-
---
--- Name: COLUMN sexy_user_stats.last_updated; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sexy_user_stats.last_updated IS 'Timestamp for cache invalidation';
-
-
---
--- Name: sexy_video_likes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_video_likes (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    video_id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
---
--- Name: sexy_video_plays; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_video_plays (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    video_id uuid NOT NULL,
-    user_id uuid,
-    session_id character varying(255),
-    duration_watched integer DEFAULT 0,
-    completed boolean DEFAULT false,
-    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    date_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
---
--- Name: sexy_videos; Type: TABLE; Schema: public; Owner: -
+-- Name: sexy_videos; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.sexy_videos (
@@ -1148,15 +955,14 @@ CREATE TABLE public.sexy_videos (
     featured boolean,
     tags json,
     movie uuid,
-    description text,
-    likes_count integer DEFAULT 0,
-    plays_count integer DEFAULT 0,
-    views_count integer DEFAULT 0
+    description text
 );
 
 
+ALTER TABLE public.sexy_videos OWNER TO valknar;
+
 --
--- Name: sexy_videos_directus_users; Type: TABLE; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users; Type: TABLE; Schema: public; Owner: valknar
 --
 
 CREATE TABLE public.sexy_videos_directus_users (
@@ -1166,8 +972,10 @@ CREATE TABLE public.sexy_videos_directus_users (
 );
 
 
+ALTER TABLE public.sexy_videos_directus_users OWNER TO valknar;
+
 --
--- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE; Schema: public; Owner: valknar
 --
 
 CREATE SEQUENCE public.sexy_videos_directus_users_id_seq
@@ -1179,139 +987,94 @@ CREATE SEQUENCE public.sexy_videos_directus_users_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.sexy_videos_directus_users_id_seq OWNER TO valknar;
+
 --
--- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: valknar
 --
 
 ALTER SEQUENCE public.sexy_videos_directus_users_id_seq OWNED BY public.sexy_videos_directus_users.id;
 
 
 --
--- Name: sexy_videos_models; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sexy_videos_models (
-    id integer NOT NULL,
-    sexy_videos_id uuid NOT NULL,
-    directus_users_id uuid NOT NULL,
-    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    date_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
---
--- Name: sexy_videos_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.sexy_videos_models_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sexy_videos_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.sexy_videos_models_id_seq OWNED BY public.sexy_videos_models.id;
-
-
---
--- Name: directus_activity id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_activity id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_activity ALTER COLUMN id SET DEFAULT nextval('public.directus_activity_id_seq'::regclass);
 
 
 --
--- Name: directus_fields id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_fields id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_fields ALTER COLUMN id SET DEFAULT nextval('public.directus_fields_id_seq'::regclass);
 
 
 --
--- Name: directus_notifications id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_notifications id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_notifications ALTER COLUMN id SET DEFAULT nextval('public.directus_notifications_id_seq'::regclass);
 
 
 --
--- Name: directus_permissions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_permissions id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_permissions ALTER COLUMN id SET DEFAULT nextval('public.directus_permissions_id_seq'::regclass);
 
 
 --
--- Name: directus_presets id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_presets id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_presets ALTER COLUMN id SET DEFAULT nextval('public.directus_presets_id_seq'::regclass);
 
 
 --
--- Name: directus_relations id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_relations id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_relations ALTER COLUMN id SET DEFAULT nextval('public.directus_relations_id_seq'::regclass);
 
 
 --
--- Name: directus_revisions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_revisions id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_revisions ALTER COLUMN id SET DEFAULT nextval('public.directus_revisions_id_seq'::regclass);
 
 
 --
--- Name: directus_settings id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_settings id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings ALTER COLUMN id SET DEFAULT nextval('public.directus_settings_id_seq'::regclass);
 
 
 --
--- Name: directus_webhooks id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: directus_webhooks id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_webhooks ALTER COLUMN id SET DEFAULT nextval('public.directus_webhooks_id_seq'::regclass);
 
 
 --
--- Name: junction_directus_users_files id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: junction_directus_users_files id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.junction_directus_users_files ALTER COLUMN id SET DEFAULT nextval('public.junction_directus_users_files_id_seq'::regclass);
 
 
 --
--- Name: sexy_model_photos id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_model_photos ALTER COLUMN id SET DEFAULT nextval('public.sexy_model_photos_id_seq'::regclass);
-
-
---
--- Name: sexy_videos_directus_users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users id; Type: DEFAULT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos_directus_users ALTER COLUMN id SET DEFAULT nextval('public.sexy_videos_directus_users_id_seq'::regclass);
 
 
 --
--- Name: sexy_videos_models id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_videos_models ALTER COLUMN id SET DEFAULT nextval('public.sexy_videos_models_id_seq'::regclass);
-
-
---
--- Data for Name: directus_access; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_access; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_access (id, role, "user", policy, sort) FROM stdin;
@@ -1327,7 +1090,7 @@ b4f61dcc-b54e-4b3e-8a5e-bfbf029f6349	\N	4d310101-f7b1-47fe-982a-efe4abf25c55	656
 
 
 --
--- Data for Name: directus_activity; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_activity; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_activity (id, action, "user", "timestamp", ip, user_agent, collection, item, origin) FROM stdin;
@@ -1433,7 +1196,6 @@ COPY public.directus_activity (id, action, "user", "timestamp", ip, user_agent, 
 100	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.049+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	12	http://localhost:8055
 101	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.085+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	13	http://localhost:8055
 102	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.119+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	14	http://localhost:8055
-1016	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:01:53.134+00	172.20.0.1	curl/8.14.1	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	\N
 103	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.148+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	15	http://localhost:8055
 104	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.181+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	16	http://localhost:8055
 105	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-06 10:17:11.21+00	172.18.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36	directus_fields	17	http://localhost:8055
@@ -2339,17 +2101,11 @@ COPY public.directus_activity (id, action, "user", "timestamp", ip, user_agent, 
 1012	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:21:11.728+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_videos	75296c46-3c71-4182-a4ce-416722377d76	https://sexy.pivoine.art
 1014	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:24:35.626+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_videos	299cf96a-8cfc-43d4-81a9-41c5f327808f	https://sexy.pivoine.art
 1013	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:23:22.089+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	https://sexy.pivoine.art
-1017	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:10:51.794+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	http://localhost:3000
-1018	create	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:11:25.319+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_video_likes	36d416db-a410-45b3-8664-150c0ca96b41	http://localhost:3000
-1019	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:14:45.393+00	172.20.0.1	curl/8.14.1	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	\N
-1020	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:20:26.164+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	http://localhost:3000
-1021	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:30:46.559+00	172.20.0.1	curl/8.14.1	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	\N
-1022	create	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 12:58:23.107+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_recordings	2dd34b2b-84ba-42ad-8804-1b7cb138336a	http://localhost:3000
 \.
 
 
 --
--- Data for Name: directus_collections; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_collections; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_collections (collection, icon, note, display_template, hidden, singleton, translations, archive_field, archive_app_filter, archive_value, unarchive_value, sort_field, accountability, color, item_duplication_fields, sort, "group", collapse, preview_url, versioning) FROM stdin;
@@ -2361,7 +2117,7 @@ junction_directus_users_files	import_export	\N	\N	t	f	\N	\N	t	\N	\N	\N	all	\N	\N
 
 
 --
--- Data for Name: directus_comments; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_comments; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_comments (id, collection, item, comment, date_created, date_updated, user_created, user_updated) FROM stdin;
@@ -2369,7 +2125,7 @@ COPY public.directus_comments (id, collection, item, comment, date_created, date
 
 
 --
--- Data for Name: directus_dashboards; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_dashboards; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_dashboards (id, name, icon, note, date_created, user_created, color) FROM stdin;
@@ -2377,7 +2133,7 @@ COPY public.directus_dashboards (id, name, icon, note, date_created, user_create
 
 
 --
--- Data for Name: directus_extensions; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_extensions; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_extensions (enabled, id, folder, source, bundle) FROM stdin;
@@ -2389,7 +2145,7 @@ t	c68a7782-aef8-4fc2-a899-c1e49d74fd27	endpoint	local	9b117170-0651-4be5-9ab5-5a
 
 
 --
--- Data for Name: directus_fields; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_fields; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_fields (id, collection, field, special, interface, options, display, display_options, readonly, hidden, sort, width, translations, note, conditions, required, "group", validation, validation_message) FROM stdin;
@@ -2440,7 +2196,7 @@ COPY public.directus_fields (id, collection, field, special, interface, options,
 
 
 --
--- Data for Name: directus_files; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_files; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_files (id, storage, filename_disk, filename_download, title, type, folder, uploaded_by, created_on, modified_by, modified_on, charset, filesize, width, height, duration, embed, description, location, tags, metadata, focal_point_x, focal_point_y, tus_id, tus_data, uploaded_on) FROM stdin;
@@ -2467,7 +2223,7 @@ b5c8e028-43c0-4eea-9b69-a3478d3f219b	local	b5c8e028-43c0-4eea-9b69-a3478d3f219b.
 
 
 --
--- Data for Name: directus_flows; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_flows; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_flows (id, name, icon, color, description, status, trigger, accountability, options, operation, date_created, user_created) FROM stdin;
@@ -2475,7 +2231,7 @@ COPY public.directus_flows (id, name, icon, color, description, status, trigger,
 
 
 --
--- Data for Name: directus_folders; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_folders; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_folders (id, name, parent) FROM stdin;
@@ -2493,7 +2249,7 @@ a21e028c-52de-4bc2-8b74-2633194267ab	users	c214c905-885b-4d66-a6a1-6527b0606200
 
 
 --
--- Data for Name: directus_migrations; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_migrations; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_migrations (version, name, "timestamp") FROM stdin;
@@ -2592,7 +2348,7 @@ COPY public.directus_migrations (version, name, "timestamp") FROM stdin;
 
 
 --
--- Data for Name: directus_notifications; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_notifications; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_notifications (id, "timestamp", status, recipient, sender, subject, message, collection, item) FROM stdin;
@@ -2600,7 +2356,7 @@ COPY public.directus_notifications (id, "timestamp", status, recipient, sender, 
 
 
 --
--- Data for Name: directus_operations; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_operations; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_operations (id, name, key, type, position_x, position_y, options, resolve, reject, flow, date_created, user_created) FROM stdin;
@@ -2608,7 +2364,7 @@ COPY public.directus_operations (id, name, key, type, position_x, position_y, op
 
 
 --
--- Data for Name: directus_panels; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_panels; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_panels (id, dashboard, name, icon, color, show_header, note, type, position_x, position_y, width, height, options, date_created, user_created) FROM stdin;
@@ -2616,7 +2372,7 @@ COPY public.directus_panels (id, dashboard, name, icon, color, show_header, note
 
 
 --
--- Data for Name: directus_permissions; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_permissions; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_permissions (id, collection, action, permissions, validation, presets, fields, policy) FROM stdin;
@@ -2661,7 +2417,7 @@ COPY public.directus_permissions (id, collection, action, permissions, validatio
 
 
 --
--- Data for Name: directus_policies; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_policies; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_policies (id, name, icon, description, ip_access, enforce_tfa, admin_access, app_access) FROM stdin;
@@ -2674,7 +2430,7 @@ f575bea7-7260-4d81-a931-81d762f2b47d	Public	public	\N	\N	f	f	f
 
 
 --
--- Data for Name: directus_presets; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_presets; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_presets (id, bookmark, "user", role, collection, search, layout, layout_query, layout_options, refresh_interval, filter, icon, color) FROM stdin;
@@ -2686,7 +2442,7 @@ COPY public.directus_presets (id, bookmark, "user", role, collection, search, la
 
 
 --
--- Data for Name: directus_relations; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_relations; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_relations (id, many_collection, many_field, one_collection, one_field, one_collection_field, one_allowed_collections, junction_field, sort_field, one_deselect_action) FROM stdin;
@@ -2705,7 +2461,7 @@ COPY public.directus_relations (id, many_collection, many_field, one_collection,
 
 
 --
--- Data for Name: directus_revisions; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_revisions; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_revisions (id, activity, collection, item, data, delta, parent, version) FROM stdin;
@@ -3286,7 +3042,6 @@ COPY public.directus_revisions (id, activity, collection, item, data, delta, par
 579	792	directus_fields	68	{"id":68,"collection":"sexy_videos","field":"image","special":["file"],"interface":"file-image","options":{"folder":"7360b85c-3bb7-4334-ba81-2f46575ea056"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":8,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"image","sort":8,"group":null}	\N	\N
 580	793	directus_fields	83	{"id":83,"collection":"sexy_videos","field":"movie","special":["file"],"interface":"file","options":{"folder":"3f83c727-9c90-4e0d-871f-ab81c295043a","filter":{"_and":[{"type":{"_eq":"video/mp4"}}]}},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":9,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"movie","sort":9,"group":null}	\N	\N
 581	794	directus_fields	79	{"id":79,"collection":"sexy_videos","field":"models","special":["m2m"],"interface":"list-m2m","options":null,"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":10,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"models","sort":10,"group":null}	\N	\N
-750	1018	sexy_video_likes	36d416db-a410-45b3-8664-150c0ca96b41	{"video_id":"75296c46-3c71-4182-a4ce-416722377d76","user_id":"4d310101-f7b1-47fe-982a-efe4abf25c55"}	{"video_id":"75296c46-3c71-4182-a4ce-416722377d76","user_id":"4d310101-f7b1-47fe-982a-efe4abf25c55"}	\N	\N
 582	795	directus_fields	70	{"id":70,"collection":"sexy_videos","field":"upload_date","special":null,"interface":"datetime","options":null,"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":11,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"upload_date","sort":11,"group":null}	\N	\N
 583	796	directus_fields	71	{"id":71,"collection":"sexy_videos","field":"premium","special":["cast-boolean"],"interface":"boolean","options":{"label":"Premium"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":12,"width":"full","translations":null,"note":null,"conditions":null,"required":false,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"premium","sort":12,"group":null}	\N	\N
 584	797	directus_fields	72	{"id":72,"collection":"sexy_videos","field":"featured","special":["cast-boolean"],"interface":"boolean","options":{"label":"Featured"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":13,"width":"full","translations":null,"note":null,"conditions":null,"required":false,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"featured","sort":13,"group":null}	\N	\N
@@ -3451,12 +3206,11 @@ COPY public.directus_revisions (id, activity, collection, item, data, delta, par
 747	1012	sexy_videos	75296c46-3c71-4182-a4ce-416722377d76	{"id":"75296c46-3c71-4182-a4ce-416722377d76","status":"published","user_created":"4d310101-f7b1-47fe-982a-efe4abf25c55","date_created":"2025-09-26T13:56:55.554Z","date_updated":"2025-10-08T02:21:11.727Z","slug":"sexyart-sexybelle","title":"SexyArt - SexyBelle","image":"bab78ff3-10bf-4fc6-9e3a-6e58bb6655b1","upload_date":"2025-09-26T15:48:00","premium":null,"featured":true,"tags":["Funky","Sex","Love","Kiss"],"movie":"3001a83c-3033-4dd1-b3ac-c910bdb1ef2c","description":"Comin' Soon!!!!!!","models":[1,2]}	{"title":"SexyArt - SexyBelle","date_updated":"2025-10-08T02:21:11.727Z"}	\N	\N
 748	1014	sexy_videos	299cf96a-8cfc-43d4-81a9-41c5f327808f	{"id":"299cf96a-8cfc-43d4-81a9-41c5f327808f","status":"published","user_created":"4d310101-f7b1-47fe-982a-efe4abf25c55","date_created":"2025-10-08T02:21:02.825Z","date_updated":"2025-10-08T02:24:35.625Z","slug":"sexyart-in-the-opera","title":"SexyArt - In The Opera","image":"b5c8e028-43c0-4eea-9b69-a3478d3f219b","upload_date":"2025-10-08T00:24:00","premium":null,"featured":true,"tags":["Matrue","Love","Sex","Music"],"movie":"009f5bad-9a8a-401e-9cb1-5792fa41337f","description":"Mit Gewitter und Sturm aus fernem Meer -\\nMein Mädel, bin dir nah'! Hurrah!\\nHurrah! Über turmhohe Flut vom Süden her\\nMein Mädel, ich bin da! Hurrah!\\nMein Mädel, wenn nicht Südwind wär\\nIch nimmer wohl käm' zu dir;\\nAch lieber Südwind, blas' noch mehr\\nMein Mädel verlangt nach mir . .","models":[3]}	{"upload_date":"2025-10-08T00:24:00","date_updated":"2025-10-08T02:24:35.625Z"}	\N	\N
 749	1015	sexy_videos	299cf96a-8cfc-43d4-81a9-41c5f327808f	{"id":"299cf96a-8cfc-43d4-81a9-41c5f327808f","status":"published","user_created":"4d310101-f7b1-47fe-982a-efe4abf25c55","date_created":"2025-10-08T02:21:02.825Z","date_updated":"2025-10-08T02:30:35.159Z","slug":"sexyart-in-the-opera","title":"SexyArt - In The Opera","image":"b5c8e028-43c0-4eea-9b69-a3478d3f219b","upload_date":"2025-10-08T00:24:00","premium":null,"featured":true,"tags":["Mature","Sex","Love","Music"],"movie":"009f5bad-9a8a-401e-9cb1-5792fa41337f","description":"Mit Gewitter und Sturm aus fernem Meer -\\nMein Mädel, bin dir nah'! Hurrah!\\nHurrah! Über turmhohe Flut vom Süden her\\nMein Mädel, ich bin da! Hurrah!\\nMein Mädel, wenn nicht Südwind wär\\nIch nimmer wohl käm' zu dir;\\nAch lieber Südwind, blas' noch mehr\\nMein Mädel verlangt nach mir . .","models":[3]}	{"tags":["Mature","Sex","Love","Music"],"date_updated":"2025-10-08T02:30:35.159Z"}	\N	\N
-751	1022	sexy_recordings	2dd34b2b-84ba-42ad-8804-1b7cb138336a	{"title":"test","description":"test","slug":"test","duration":6762.300000011921,"events":[{"timestamp":1441.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1493.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1504.7000000178814,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1515.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":1531.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":1548.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":1558.2000000178814,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":1574.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2717.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2799.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2825.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2837.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":2875.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":2900.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":2925.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3530.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3550.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3574.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3604,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3633.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3661.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4361,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4396,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4412.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4430.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4496,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4521.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4632.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4654.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":4683.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":4725.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":4842.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":4896.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":4937.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5067.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5094.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5122.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5145.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5197.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5208.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5221,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5243.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":55.00000000000001},{"timestamp":5260.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":55.00000000000001},{"timestamp":5271.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5288.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5297.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5309.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5321.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5329.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5336.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5351.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5365.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5552.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5560.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5567.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5579.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5591.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5598.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5609,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5621.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5629.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5638.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5764.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5774.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5785.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5794.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5801.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5816.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5826.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5835.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5857.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5864.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5878.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5892.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5898.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5909.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5921.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5929.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5938.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5949.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5960.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":6077.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":6108,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6119.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6129,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6173.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6248.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6258.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6265,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6286.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6296.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6311.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6325.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":95},{"timestamp":6334.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6346.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6389.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6489.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6496.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6505.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6515.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6528.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6535.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6544.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6555.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6573.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6584.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6593.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6656.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6668.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6681,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6691.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6701.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6711.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6725.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6732.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6741.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6752.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6762.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100}],"device_info":[{"name":"Lovense Lush","index":0,"capabilities":["Vibrate"]}],"tags":["test"],"linked_video":null,"status":"draft","public":false}	{"title":"test","description":"test","slug":"test","duration":6762.300000011921,"events":[{"timestamp":1441.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1493.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1504.7000000178814,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":5},{"timestamp":1515.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":1531.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":1548.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":1558.2000000178814,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":1574.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2717.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2799.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2825.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":2837.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":2875.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":2900.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":2925.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3530.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3550.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":3574.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3604,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3633.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":3661.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4361,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4396,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4412.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4430.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":10},{"timestamp":4496,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4521.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4632.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":15},{"timestamp":4654.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":4683.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":20},{"timestamp":4725.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":4842.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":25},{"timestamp":4896.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":30},{"timestamp":4937.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5067.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5094.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":40},{"timestamp":5122.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5145.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5197.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5208.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5221,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":50},{"timestamp":5243.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":55.00000000000001},{"timestamp":5260.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":55.00000000000001},{"timestamp":5271.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5288.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5297.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5309.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5321.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5329.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5336.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":60},{"timestamp":5351.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5365.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5552.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5560.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5567.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5579.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5591.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5598.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5609,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":65},{"timestamp":5621.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5629.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5638.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5764.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5774.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5785.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5794.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5801.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":70},{"timestamp":5816.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5826.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5835.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5857.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5864.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5878.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5892.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5898.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":75},{"timestamp":5909.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5921.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5929.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5938.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5949.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":5960.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":6077.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":80},{"timestamp":6108,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6119.200000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6129,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6173.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6248.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6258.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6265,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":85},{"timestamp":6286.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6296.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6311.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":90},{"timestamp":6325.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":95},{"timestamp":6334.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6346.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6389.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6489.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6496.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6505.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6515.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6528.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6535.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6544.5,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6555.5999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6573.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6584.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6593.9000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6656.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6668.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6681,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6691.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6701.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6711.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6725.0999999940395,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6732.4000000059605,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6741.800000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6752.700000017881,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100},{"timestamp":6762.300000011921,"deviceIndex":0,"deviceName":"Lovense Lush","actuatorIndex":0,"actuatorType":"Vibrate","value":100}],"device_info":[{"name":"Lovense Lush","index":0,"capabilities":["Vibrate"]}],"tags":["test"],"linked_video":null,"status":"draft","public":false}	\N	\N
 \.
 
 
 --
--- Data for Name: directus_roles; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_roles; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_roles (id, name, icon, description, parent) FROM stdin;
@@ -3468,20 +3222,17 @@ f1d1d90f-9a4a-4199-bc70-f9cd3cccd99f	Editor	ink_pen	As an editor i can write mag
 
 
 --
--- Data for Name: directus_sessions; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_sessions; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_sessions (token, "user", expires, ip, user_agent, share, origin, next_token) FROM stdin;
-O-XfFP0NCal8BHe52BdxJLIF-nYn9lYUAi5Ti86Dk4T64BxKySiz2V8eiTpupMHo	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:01:53.126+00	172.20.0.1	curl/8.14.1	\N	\N	\N
-l-tn6nS7v-4oW96rf3CzKL9aRKurTH7-yrXCEAEa15hza_vzECbPDwkMxgiacU3Q	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:10:51.781+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	http://localhost:3000	\N
-Gs_dEs6es7D0SpYCFJ1BQxkylO0521osHHACTT9hZmkGciMH57gHtmakqxxUIMWF	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:14:45.384+00	172.20.0.1	curl/8.14.1	\N	\N	\N
--D-xEZyNTaSzSNtvW7QnlUVjpE_chwaJXdcPBgxyckEiAOBk4CzBp-Yhs8KSwjXZ	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:20:26.159+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	http://localhost:3000	\N
-bc2je3aQc50QusCVjISe4XpF08tRM0wVeHJr4lHAZuNPFlmqQYIt45SBfl0sBDe-	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:30:46.54+00	172.20.0.1	curl/8.14.1	\N	\N	\N
+ddBPC9NlSVdcSd1e0MlpauKlSqWW4Ki0o7zBs6ARgs1DPwAqgH3fnb-vq4lmN8i-	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:37:30.447+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	https://sexy.pivoine.art	DQbJhWgTzIR68ja4Yd1PcvaxL58dYryZNdNWwtxLHvLhrgolFe8KutlGz-D3xxr2
+DQbJhWgTzIR68ja4Yd1PcvaxL58dYryZNdNWwtxLHvLhrgolFe8KutlGz-D3xxr2	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-09 02:37:20.447+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	https://sexy.pivoine.art	\N
 \.
 
 
 --
--- Data for Name: directus_settings; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_settings; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_settings (id, project_name, project_url, project_color, project_logo, public_foreground, public_background, public_note, auth_login_attempts, auth_password_policy, storage_asset_transform, storage_asset_presets, custom_css, storage_default_folder, basemaps, mapbox_key, module_bar, project_descriptor, default_language, custom_aspect_ratios, public_favicon, default_appearance, default_theme_light, theme_light_overrides, default_theme_dark, theme_dark_overrides, report_error_url, report_bug_url, report_feature_url, public_registration, public_registration_verify_email, public_registration_role, public_registration_email_filter, visual_editor_urls, accepted_terms, project_id, mcp_enabled, mcp_allow_deletes, mcp_prompts_collection, mcp_system_prompt_enabled, mcp_system_prompt) FROM stdin;
@@ -3490,7 +3241,7 @@ COPY public.directus_settings (id, project_name, project_url, project_color, pro
 
 
 --
--- Data for Name: directus_shares; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_shares; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_shares (id, name, collection, item, role, password, user_created, date_created, date_start, date_end, times_used, max_uses) FROM stdin;
@@ -3498,7 +3249,7 @@ COPY public.directus_shares (id, name, collection, item, role, password, user_cr
 
 
 --
--- Data for Name: directus_translations; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_translations; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_translations (id, language, key, value) FROM stdin;
@@ -3506,17 +3257,17 @@ COPY public.directus_translations (id, language, key, value) FROM stdin;
 
 
 --
--- Data for Name: directus_users; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_users; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_users (id, first_name, last_name, email, password, location, title, description, tags, avatar, language, tfa_secret, status, role, token, last_access, last_page, provider, external_identifier, auth_data, email_notifications, appearance, theme_dark, theme_light, theme_light_overrides, theme_dark_overrides, text_direction, website, slug, join_date, featured, artist_name, banner) FROM stdin;
 543f4d0b-e346-4e5e-8aca-4a9b35d5fab6	Palina	Rojinski	palina@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$ad2kKJ4YUQwjIpPCN/CdhQ$LwyZbpm0bx+p49y9x02UFNI4GepTW4vIrFaN3tuIs0E	\N	\N	Award-winning model, dancer and actress with 15+ years of experience.	["Love","Sex","Design","Art"]	b85b3008-f592-4676-8c84-666e0a60423d	\N	\N	active	55da25e6-9a87-4264-92e8-9066fdcf9c07	\N	\N	\N	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	luna-belle	2025-09-09 12:00:00	t	Luna Belle	cecf7ce8-388a-43a9-b9bc-2ab4d44d3f7f
-4d310101-f7b1-47fe-982a-efe4abf25c55	Sebastian	Krüger	valknar@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$Z0DGbR7usavt6jP8lEDXCg$2VspGk40ICKo2PraYaBhAuRCm6+5DuCjDeSjqDzH7S0	\N	\N	Visionary leader with 15+ years in digital media and content creation.	["Love","Sex","Design","Art"]	e77c58c1-f718-4b7a-b34c-c42861c8122f	\N	\N	active	ea3a9127-2b65-462c-85a8-dbafe9b4fe24	\N	2025-10-28 11:30:46.568+00	/content/sexy_videos	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	valknar	2025-09-09 12:00:00	t	Valknar	d3f53a9b-bbce-436c-a6f4-04e5ef120d7e
+4d310101-f7b1-47fe-982a-efe4abf25c55	Sebastian	Krüger	valknar@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$vtigbG/p86I0WqpqZviaLA$V6BYW2C9h8t/IMVIS26fIAwO4J1zTCoLM71NoiVduKw	\N	\N	Visionary leader with 15+ years in digital media and content creation.	["Love","Sex","Design","Art"]	e77c58c1-f718-4b7a-b34c-c42861c8122f	\N	\N	active	ea3a9127-2b65-462c-85a8-dbafe9b4fe24	\N	2025-10-08 02:37:20.451+00	/content/sexy_videos	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	valknar	2025-09-09 12:00:00	t	Valknar	d3f53a9b-bbce-436c-a6f4-04e5ef120d7e
 \.
 
 
 --
--- Data for Name: directus_versions; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_versions; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_versions (id, key, name, collection, item, hash, date_created, date_updated, user_created, user_updated, delta) FROM stdin;
@@ -3524,7 +3275,7 @@ COPY public.directus_versions (id, key, name, collection, item, hash, date_creat
 
 
 --
--- Data for Name: directus_webhooks; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: directus_webhooks; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.directus_webhooks (id, name, method, url, status, data, actions, collections, headers, was_active_before_deprecation, migrated_flow) FROM stdin;
@@ -3532,7 +3283,7 @@ COPY public.directus_webhooks (id, name, method, url, status, data, actions, col
 
 
 --
--- Data for Name: junction_directus_users_files; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: junction_directus_users_files; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.junction_directus_users_files (id, directus_users_id, directus_files_id) FROM stdin;
@@ -3549,32 +3300,7 @@ COPY public.junction_directus_users_files (id, directus_users_id, directus_files
 
 
 --
--- Data for Name: sexy_achievements; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_achievements (id, code, name, description, icon, category, required_count, points_reward, sort, status) FROM stdin;
-039d000e-1faa-4ab2-a44f-52f4ce431b46	first_recording	First Recording	Create your first recording	🎬	recordings	1	50	1	published
-d7fce56e-ac34-4cfd-bdaf-a8bb09f14a43	recording_10	Recording Enthusiast	Create 10 recordings	📹	recordings	10	100	2	published
-28d67b94-fdc3-4565-bc3a-df172f272047	recording_50	Prolific Creator	Create 50 recordings	🎥	recordings	50	500	3	published
-8d38f00a-5fd6-4384-9390-6961cbebc4dc	recording_100	Recording Master	Create 100 recordings	🏆	recordings	100	1000	4	published
-ebc2927e-3e25-44d9-bf13-bc54a6596711	featured_recording	Featured Creator	Get a recording featured	⭐	recordings	1	200	5	published
-0617b3c0-ec8e-40d8-84f9-621c4ecbcbf3	first_play	First Play	Play your first recording	▶️	playback	1	25	10	published
-f47fe499-9954-4caf-a5c8-c0a1156128b2	play_100	Active Player	Play 100 recordings	🎮	playback	100	250	11	published
-a3de1735-de10-472e-ade9-b75ca3f6e0f3	play_500	Playback Enthusiast	Play 500 recordings	🔥	playback	500	1000	12	published
-355dd080-aeb8-4600-95c7-20d93e8d8f4b	completionist_10	Completionist	Complete 10 recordings to 90%+	✅	playback	10	100	13	published
-c54eb528-f4e4-43fa-bad1-6cb845cbeb24	completionist_100	Super Completionist	Complete 100 recordings	💯	playback	100	500	14	published
-329e2582-e31a-4727-a3fb-3869d37a48d1	first_comment	First Comment	Leave your first comment	💬	social	1	25	20	published
-8f7e17a6-33fa-4fb2-ba3b-b5f306236c2f	comment_50	Conversationalist	Leave 50 comments	💭	social	50	200	21	published
-695dc554-c245-416b-8aff-8a740cb32c59	comment_250	Community Voice	Leave 250 comments	📣	social	250	750	22	published
-9b5de2b3-4a91-4e30-990b-9ba0e971f79d	early_adopter	Early Adopter	Join in the first month	🚀	special	1	500	30	published
-d3068c32-89b8-49b9-9630-f0b85e0b5e69	one_year	One Year Anniversary	Be a member for 1 year	🎂	special	1	1000	31	published
-ba587a5e-9a81-4e9f-a7d4-d216e6e22e11	balanced_creator	Balanced Creator	50 recordings + 100 plays	⚖️	special	1	500	32	published
-b6b41106-b96d-4e39-a4f5-4060f7f3c730	top_10_rank	Top 10 Leaderboard	Reach top 10 on leaderboard	🏅	special	1	2000	33	published
-\.
-
-
---
--- Data for Name: sexy_articles; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: sexy_articles; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.sexy_articles (id, status, user_created, date_created, date_updated, slug, title, excerpt, content, image, tags, publish_date, category, featured, author) FROM stdin;
@@ -3583,85 +3309,17 @@ COPY public.sexy_articles (id, status, user_created, date_created, date_updated,
 
 
 --
--- Data for Name: sexy_model_photos; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: sexy_videos; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
-COPY public.sexy_model_photos (id, directus_users_id, directus_files_id, date_created, date_updated) FROM stdin;
+COPY public.sexy_videos (id, status, user_created, date_created, date_updated, slug, title, image, upload_date, premium, featured, tags, movie, description) FROM stdin;
+75296c46-3c71-4182-a4ce-416722377d76	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-26 13:56:55.554+00	2025-10-08 02:21:11.727+00	sexyart-sexybelle	SexyArt - SexyBelle	bab78ff3-10bf-4fc6-9e3a-6e58bb6655b1	2025-09-26 15:48:00	\N	t	["Funky","Sex","Love","Kiss"]	3001a83c-3033-4dd1-b3ac-c910bdb1ef2c	Comin' Soon!!!!!!
+299cf96a-8cfc-43d4-81a9-41c5f327808f	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:21:02.825+00	2025-10-08 02:30:35.159+00	sexyart-in-the-opera	SexyArt - In The Opera	b5c8e028-43c0-4eea-9b69-a3478d3f219b	2025-10-08 00:24:00	\N	t	["Mature","Sex","Love","Music"]	009f5bad-9a8a-401e-9cb1-5792fa41337f	Mit Gewitter und Sturm aus fernem Meer -\nMein Mädel, bin dir nah'! Hurrah!\nHurrah! Über turmhohe Flut vom Süden her\nMein Mädel, ich bin da! Hurrah!\nMein Mädel, wenn nicht Südwind wär\nIch nimmer wohl käm' zu dir;\nAch lieber Südwind, blas' noch mehr\nMein Mädel verlangt nach mir . .
 \.
 
 
 --
--- Data for Name: sexy_recording_plays; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_recording_plays (id, user_id, recording_id, duration_played, completed, date_created, date_updated) FROM stdin;
-\.
-
-
---
--- Data for Name: sexy_recordings; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_recordings (id, title, description, slug, duration, events, device_info, tags, linked_video, status, public, user_created, user_updated, date_created, date_updated) FROM stdin;
-2dd34b2b-84ba-42ad-8804-1b7cb138336a	test	test	test	6762.30	[{"value": 5, "timestamp": 1441.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 5, "timestamp": 1493.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 5, "timestamp": 1504.7000000178814, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 1515.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 20, "timestamp": 1531.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 25, "timestamp": 1548.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 1558.2000000178814, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 1574.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 2717.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 2799.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 2825.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 25, "timestamp": 2837.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 25, "timestamp": 2875.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 20, "timestamp": 2900.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 2925.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 3530.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 3550.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 3574.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 3604, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 3633.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 3661.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 4361, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 4396, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 4412.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 10, "timestamp": 4430.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 4496, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 4521.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 15, "timestamp": 4632.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 20, "timestamp": 4654.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 20, "timestamp": 4683.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 25, "timestamp": 4725.200000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 25, "timestamp": 4842.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 30, "timestamp": 4896.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 40, "timestamp": 4937.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 40, "timestamp": 5067.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 40, "timestamp": 5094.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 50, "timestamp": 5122.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 50, "timestamp": 5145.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 50, "timestamp": 5197.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 50, "timestamp": 5208.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 50, "timestamp": 5221, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 55.00000000000001, "timestamp": 5243.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 55.00000000000001, "timestamp": 5260.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5271.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5288.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5297.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5309.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5321.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5329.200000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 60, "timestamp": 5336.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5351.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5365.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5552.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5560.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5567.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5579.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5591.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5598.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 65, "timestamp": 5609, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5621.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5629.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5638.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5764.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5774.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5785.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5794.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 70, "timestamp": 5801.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5816.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5826.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5835.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5857.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5864.200000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5878.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5892.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 75, "timestamp": 5898.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5909.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5921.200000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5929.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5938.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5949.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 5960.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 80, "timestamp": 6077.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6108, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6119.200000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6129, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6173.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6248.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6258.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 85, "timestamp": 6265, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 90, "timestamp": 6286.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 90, "timestamp": 6296.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 90, "timestamp": 6311.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 95, "timestamp": 6325.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6334.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6346.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6389.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6489.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6496.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6505.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6515.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6528.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6535.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6544.5, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6555.5999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6573.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6584.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6593.9000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6656.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6668.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6681, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6691.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6701.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6711.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6725.0999999940395, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6732.4000000059605, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6741.800000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6752.700000017881, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}, {"value": 100, "timestamp": 6762.300000011921, "deviceName": "Lovense Lush", "deviceIndex": 0, "actuatorType": "Vibrate", "actuatorIndex": 0}]	[{"name": "Lovense Lush", "index": 0, "capabilities": ["Vibrate"]}]	["test"]	\N	published	f	4d310101-f7b1-47fe-982a-efe4abf25c55	\N	2025-10-28 12:58:23.042713+00	2025-10-28 12:58:23.042713+00
-\.
-
-
---
--- Data for Name: sexy_user_achievements; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_user_achievements (id, user_id, achievement_id, progress, date_unlocked) FROM stdin;
-\.
-
-
---
--- Data for Name: sexy_user_points; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_user_points (id, user_id, action, points, recording_id, date_created) FROM stdin;
-d7564601-ca68-4509-83ed-2f7b65441fd9	4d310101-f7b1-47fe-982a-efe4abf25c55	RECORDING_CREATE	50	2dd34b2b-84ba-42ad-8804-1b7cb138336a	2025-10-28 13:01:04.159032+00
-\.
-
-
---
--- Data for Name: sexy_user_stats; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_user_stats (id, user_id, total_raw_points, total_weighted_points, recordings_count, playbacks_count, comments_count, achievements_count, last_updated) FROM stdin;
-a18cd5f6-eaef-459b-bb08-2190f9f10e4f	4d310101-f7b1-47fe-982a-efe4abf25c55	50	50.00	1	0	0	0	2025-10-28 13:01:04.168397+00
-\.
-
-
---
--- Data for Name: sexy_video_likes; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_video_likes (id, video_id, user_id, date_created) FROM stdin;
-36d416db-a410-45b3-8664-150c0ca96b41	75296c46-3c71-4182-a4ce-416722377d76	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:11:25.30707+00
-\.
-
-
---
--- Data for Name: sexy_video_plays; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_video_plays (id, video_id, user_id, session_id, duration_watched, completed, date_created, date_updated) FROM stdin;
-\.
-
-
---
--- Data for Name: sexy_videos; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.sexy_videos (id, status, user_created, date_created, date_updated, slug, title, image, upload_date, premium, featured, tags, movie, description, likes_count, plays_count, views_count) FROM stdin;
-299cf96a-8cfc-43d4-81a9-41c5f327808f	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:21:02.825+00	2025-10-08 02:30:35.159+00	sexyart-in-the-opera	SexyArt - In The Opera	b5c8e028-43c0-4eea-9b69-a3478d3f219b	2025-10-08 00:24:00	\N	t	["Mature","Sex","Love","Music"]	009f5bad-9a8a-401e-9cb1-5792fa41337f	Mit Gewitter und Sturm aus fernem Meer -\nMein Mädel, bin dir nah'! Hurrah!\nHurrah! Über turmhohe Flut vom Süden her\nMein Mädel, ich bin da! Hurrah!\nMein Mädel, wenn nicht Südwind wär\nIch nimmer wohl käm' zu dir;\nAch lieber Südwind, blas' noch mehr\nMein Mädel verlangt nach mir . .	0	0	0
-75296c46-3c71-4182-a4ce-416722377d76	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-26 13:56:55.554+00	2025-10-28 11:11:25.349+00	sexyart-sexybelle	SexyArt - SexyBelle	bab78ff3-10bf-4fc6-9e3a-6e58bb6655b1	2025-09-26 15:48:00	\N	t	["Funky","Sex","Love","Kiss"]	3001a83c-3033-4dd1-b3ac-c910bdb1ef2c	Comin' Soon!!!!!!	1	0	0
-\.
-
-
---
--- Data for Name: sexy_videos_directus_users; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: sexy_videos_directus_users; Type: TABLE DATA; Schema: public; Owner: valknar
 --
 
 COPY public.sexy_videos_directus_users (id, sexy_videos_id, directus_users_id) FROM stdin;
@@ -3672,106 +3330,84 @@ COPY public.sexy_videos_directus_users (id, sexy_videos_id, directus_users_id) F
 
 
 --
--- Data for Name: sexy_videos_models; Type: TABLE DATA; Schema: public; Owner: -
+-- Name: directus_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
-COPY public.sexy_videos_models (id, sexy_videos_id, directus_users_id, date_created, date_updated) FROM stdin;
-\.
-
-
---
--- Name: directus_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.directus_activity_id_seq', 1022, true);
+SELECT pg_catalog.setval('public.directus_activity_id_seq', 1015, true);
 
 
 --
--- Name: directus_fields_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_fields_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_fields_id_seq', 106, true);
 
 
 --
--- Name: directus_notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_notifications_id_seq', 1, false);
 
 
 --
--- Name: directus_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_permissions_id_seq', 105, true);
 
 
 --
--- Name: directus_presets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_presets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_presets_id_seq', 6, true);
 
 
 --
--- Name: directus_relations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_relations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_relations_id_seq', 27, true);
 
 
 --
--- Name: directus_revisions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_revisions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
-SELECT pg_catalog.setval('public.directus_revisions_id_seq', 751, true);
+SELECT pg_catalog.setval('public.directus_revisions_id_seq', 749, true);
 
 
 --
--- Name: directus_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_settings_id_seq', 1, true);
 
 
 --
--- Name: directus_webhooks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: directus_webhooks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.directus_webhooks_id_seq', 1, false);
 
 
 --
--- Name: junction_directus_users_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: junction_directus_users_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.junction_directus_users_files_id_seq', 9, true);
 
 
 --
--- Name: sexy_model_photos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.sexy_model_photos_id_seq', 1, false);
-
-
---
--- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: valknar
 --
 
 SELECT pg_catalog.setval('public.sexy_videos_directus_users_id_seq', 3, true);
 
 
 --
--- Name: sexy_videos_models_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.sexy_videos_models_id_seq', 1, false);
-
-
---
--- Name: directus_access directus_access_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_access directus_access_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_access
@@ -3779,7 +3415,7 @@ ALTER TABLE ONLY public.directus_access
 
 
 --
--- Name: directus_activity directus_activity_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_activity directus_activity_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_activity
@@ -3787,7 +3423,7 @@ ALTER TABLE ONLY public.directus_activity
 
 
 --
--- Name: directus_collections directus_collections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_collections directus_collections_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_collections
@@ -3795,7 +3431,7 @@ ALTER TABLE ONLY public.directus_collections
 
 
 --
--- Name: directus_comments directus_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_comments directus_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_comments
@@ -3803,7 +3439,7 @@ ALTER TABLE ONLY public.directus_comments
 
 
 --
--- Name: directus_dashboards directus_dashboards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_dashboards directus_dashboards_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_dashboards
@@ -3811,7 +3447,7 @@ ALTER TABLE ONLY public.directus_dashboards
 
 
 --
--- Name: directus_extensions directus_extensions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_extensions directus_extensions_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_extensions
@@ -3819,7 +3455,7 @@ ALTER TABLE ONLY public.directus_extensions
 
 
 --
--- Name: directus_fields directus_fields_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_fields directus_fields_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_fields
@@ -3827,7 +3463,7 @@ ALTER TABLE ONLY public.directus_fields
 
 
 --
--- Name: directus_files directus_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_files directus_files_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_files
@@ -3835,7 +3471,7 @@ ALTER TABLE ONLY public.directus_files
 
 
 --
--- Name: directus_flows directus_flows_operation_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_flows directus_flows_operation_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_flows
@@ -3843,7 +3479,7 @@ ALTER TABLE ONLY public.directus_flows
 
 
 --
--- Name: directus_flows directus_flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_flows directus_flows_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_flows
@@ -3851,7 +3487,7 @@ ALTER TABLE ONLY public.directus_flows
 
 
 --
--- Name: directus_folders directus_folders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_folders directus_folders_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_folders
@@ -3859,7 +3495,7 @@ ALTER TABLE ONLY public.directus_folders
 
 
 --
--- Name: directus_migrations directus_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_migrations directus_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_migrations
@@ -3867,7 +3503,7 @@ ALTER TABLE ONLY public.directus_migrations
 
 
 --
--- Name: directus_notifications directus_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_notifications directus_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_notifications
@@ -3875,7 +3511,7 @@ ALTER TABLE ONLY public.directus_notifications
 
 
 --
--- Name: directus_operations directus_operations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -3883,7 +3519,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_operations directus_operations_reject_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_reject_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -3891,7 +3527,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_operations directus_operations_resolve_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_resolve_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -3899,7 +3535,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_panels directus_panels_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_panels directus_panels_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_panels
@@ -3907,7 +3543,7 @@ ALTER TABLE ONLY public.directus_panels
 
 
 --
--- Name: directus_permissions directus_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_permissions directus_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_permissions
@@ -3915,7 +3551,7 @@ ALTER TABLE ONLY public.directus_permissions
 
 
 --
--- Name: directus_policies directus_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_policies directus_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_policies
@@ -3923,7 +3559,7 @@ ALTER TABLE ONLY public.directus_policies
 
 
 --
--- Name: directus_presets directus_presets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_presets directus_presets_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_presets
@@ -3931,7 +3567,7 @@ ALTER TABLE ONLY public.directus_presets
 
 
 --
--- Name: directus_relations directus_relations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_relations directus_relations_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_relations
@@ -3939,7 +3575,7 @@ ALTER TABLE ONLY public.directus_relations
 
 
 --
--- Name: directus_revisions directus_revisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_revisions directus_revisions_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_revisions
@@ -3947,7 +3583,7 @@ ALTER TABLE ONLY public.directus_revisions
 
 
 --
--- Name: directus_roles directus_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_roles directus_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_roles
@@ -3955,7 +3591,7 @@ ALTER TABLE ONLY public.directus_roles
 
 
 --
--- Name: directus_sessions directus_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_sessions directus_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_sessions
@@ -3963,7 +3599,7 @@ ALTER TABLE ONLY public.directus_sessions
 
 
 --
--- Name: directus_settings directus_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -3971,7 +3607,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_shares directus_shares_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_shares directus_shares_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_shares
@@ -3979,7 +3615,7 @@ ALTER TABLE ONLY public.directus_shares
 
 
 --
--- Name: directus_translations directus_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_translations directus_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_translations
@@ -3987,7 +3623,7 @@ ALTER TABLE ONLY public.directus_translations
 
 
 --
--- Name: directus_users directus_users_email_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_email_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -3995,7 +3631,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_users directus_users_external_identifier_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_external_identifier_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4003,7 +3639,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_users directus_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4011,7 +3647,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_users directus_users_slug_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_slug_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4019,7 +3655,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_users directus_users_token_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_token_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4027,7 +3663,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_versions directus_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_versions directus_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_versions
@@ -4035,7 +3671,7 @@ ALTER TABLE ONLY public.directus_versions
 
 
 --
--- Name: directus_webhooks directus_webhooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_webhooks directus_webhooks_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_webhooks
@@ -4043,7 +3679,7 @@ ALTER TABLE ONLY public.directus_webhooks
 
 
 --
--- Name: junction_directus_users_files junction_directus_users_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: junction_directus_users_files junction_directus_users_files_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.junction_directus_users_files
@@ -4051,23 +3687,7 @@ ALTER TABLE ONLY public.junction_directus_users_files
 
 
 --
--- Name: sexy_achievements sexy_achievements_code_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_achievements
-    ADD CONSTRAINT sexy_achievements_code_key UNIQUE (code);
-
-
---
--- Name: sexy_achievements sexy_achievements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_achievements
-    ADD CONSTRAINT sexy_achievements_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_articles sexy_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_articles sexy_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_articles
@@ -4075,7 +3695,7 @@ ALTER TABLE ONLY public.sexy_articles
 
 
 --
--- Name: sexy_articles sexy_articles_slug_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_articles sexy_articles_slug_unique; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_articles
@@ -4083,111 +3703,7 @@ ALTER TABLE ONLY public.sexy_articles
 
 
 --
--- Name: sexy_model_photos sexy_model_photos_directus_users_id_directus_files_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_model_photos
-    ADD CONSTRAINT sexy_model_photos_directus_users_id_directus_files_id_key UNIQUE (directus_users_id, directus_files_id);
-
-
---
--- Name: sexy_model_photos sexy_model_photos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_model_photos
-    ADD CONSTRAINT sexy_model_photos_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_recording_plays sexy_recording_plays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recording_plays
-    ADD CONSTRAINT sexy_recording_plays_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_recordings sexy_recordings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recordings
-    ADD CONSTRAINT sexy_recordings_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_recordings sexy_recordings_slug_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recordings
-    ADD CONSTRAINT sexy_recordings_slug_key UNIQUE (slug);
-
-
---
--- Name: sexy_user_achievements sexy_user_achievements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_achievements
-    ADD CONSTRAINT sexy_user_achievements_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_user_achievements sexy_user_achievements_user_id_achievement_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_achievements
-    ADD CONSTRAINT sexy_user_achievements_user_id_achievement_id_key UNIQUE (user_id, achievement_id);
-
-
---
--- Name: sexy_user_points sexy_user_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_points
-    ADD CONSTRAINT sexy_user_points_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_user_stats sexy_user_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_stats
-    ADD CONSTRAINT sexy_user_stats_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_user_stats sexy_user_stats_user_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_stats
-    ADD CONSTRAINT sexy_user_stats_user_id_key UNIQUE (user_id);
-
-
---
--- Name: sexy_video_likes sexy_video_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_likes
-    ADD CONSTRAINT sexy_video_likes_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_video_likes sexy_video_likes_video_id_user_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_likes
-    ADD CONSTRAINT sexy_video_likes_video_id_user_id_key UNIQUE (video_id, user_id);
-
-
---
--- Name: sexy_video_plays sexy_video_plays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_plays
-    ADD CONSTRAINT sexy_video_plays_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_videos_directus_users sexy_videos_directus_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users sexy_videos_directus_users_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos_directus_users
@@ -4195,23 +3711,7 @@ ALTER TABLE ONLY public.sexy_videos_directus_users
 
 
 --
--- Name: sexy_videos_models sexy_videos_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_videos_models
-    ADD CONSTRAINT sexy_videos_models_pkey PRIMARY KEY (id);
-
-
---
--- Name: sexy_videos_models sexy_videos_models_sexy_videos_id_directus_users_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_videos_models
-    ADD CONSTRAINT sexy_videos_models_sexy_videos_id_directus_users_id_key UNIQUE (sexy_videos_id, directus_users_id);
-
-
---
--- Name: sexy_videos sexy_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos sexy_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos
@@ -4219,203 +3719,21 @@ ALTER TABLE ONLY public.sexy_videos
 
 
 --
--- Name: directus_users_slug_index; Type: INDEX; Schema: public; Owner: -
+-- Name: directus_users_slug_index; Type: INDEX; Schema: public; Owner: valknar
 --
 
 CREATE INDEX directus_users_slug_index ON public.directus_users USING btree (slug);
 
 
 --
--- Name: idx_achievements_category; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_achievements_category ON public.sexy_achievements USING btree (category);
-
-
---
--- Name: idx_achievements_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_achievements_code ON public.sexy_achievements USING btree (code);
-
-
---
--- Name: idx_recording_plays_date; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_recording_plays_date ON public.sexy_recording_plays USING btree (date_created);
-
-
---
--- Name: idx_recording_plays_recording; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_recording_plays_recording ON public.sexy_recording_plays USING btree (recording_id);
-
-
---
--- Name: idx_recording_plays_user; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_recording_plays_user ON public.sexy_recording_plays USING btree (user_id);
-
-
---
--- Name: idx_user_achievements_achievement; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_achievements_achievement ON public.sexy_user_achievements USING btree (achievement_id);
-
-
---
--- Name: idx_user_achievements_unlocked; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_achievements_unlocked ON public.sexy_user_achievements USING btree (date_unlocked) WHERE (date_unlocked IS NOT NULL);
-
-
---
--- Name: idx_user_achievements_user; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_achievements_user ON public.sexy_user_achievements USING btree (user_id);
-
-
---
--- Name: idx_user_points_action; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_points_action ON public.sexy_user_points USING btree (action);
-
-
---
--- Name: idx_user_points_date; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_points_date ON public.sexy_user_points USING btree (date_created);
-
-
---
--- Name: idx_user_points_user; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_points_user ON public.sexy_user_points USING btree (user_id);
-
-
---
--- Name: idx_user_stats_user; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_stats_user ON public.sexy_user_stats USING btree (user_id);
-
-
---
--- Name: idx_user_stats_weighted; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_user_stats_weighted ON public.sexy_user_stats USING btree (total_weighted_points DESC);
-
-
---
--- Name: sexy_articles_slug_index; Type: INDEX; Schema: public; Owner: -
+-- Name: sexy_articles_slug_index; Type: INDEX; Schema: public; Owner: valknar
 --
 
 CREATE INDEX sexy_articles_slug_index ON public.sexy_articles USING btree (slug);
 
 
 --
--- Name: sexy_model_photos_files_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_model_photos_files_id_idx ON public.sexy_model_photos USING btree (directus_files_id);
-
-
---
--- Name: sexy_model_photos_users_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_model_photos_users_id_idx ON public.sexy_model_photos USING btree (directus_users_id);
-
-
---
--- Name: sexy_recordings_linked_video_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_recordings_linked_video_idx ON public.sexy_recordings USING btree (linked_video);
-
-
---
--- Name: sexy_recordings_slug_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_recordings_slug_idx ON public.sexy_recordings USING btree (slug);
-
-
---
--- Name: sexy_recordings_status_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_recordings_status_idx ON public.sexy_recordings USING btree (status);
-
-
---
--- Name: sexy_recordings_user_created_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_recordings_user_created_idx ON public.sexy_recordings USING btree (user_created);
-
-
---
--- Name: sexy_video_likes_user_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_video_likes_user_id_idx ON public.sexy_video_likes USING btree (user_id);
-
-
---
--- Name: sexy_video_likes_video_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_video_likes_video_id_idx ON public.sexy_video_likes USING btree (video_id);
-
-
---
--- Name: sexy_video_plays_session_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_video_plays_session_id_idx ON public.sexy_video_plays USING btree (session_id);
-
-
---
--- Name: sexy_video_plays_user_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_video_plays_user_id_idx ON public.sexy_video_plays USING btree (user_id);
-
-
---
--- Name: sexy_video_plays_video_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_video_plays_video_id_idx ON public.sexy_video_plays USING btree (video_id);
-
-
---
--- Name: sexy_videos_models_users_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_videos_models_users_id_idx ON public.sexy_videos_models USING btree (directus_users_id);
-
-
---
--- Name: sexy_videos_models_videos_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sexy_videos_models_videos_id_idx ON public.sexy_videos_models USING btree (sexy_videos_id);
-
-
---
--- Name: directus_access directus_access_policy_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_access directus_access_policy_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_access
@@ -4423,7 +3741,7 @@ ALTER TABLE ONLY public.directus_access
 
 
 --
--- Name: directus_access directus_access_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_access directus_access_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_access
@@ -4431,7 +3749,7 @@ ALTER TABLE ONLY public.directus_access
 
 
 --
--- Name: directus_access directus_access_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_access directus_access_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_access
@@ -4439,7 +3757,7 @@ ALTER TABLE ONLY public.directus_access
 
 
 --
--- Name: directus_collections directus_collections_group_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_collections directus_collections_group_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_collections
@@ -4447,7 +3765,7 @@ ALTER TABLE ONLY public.directus_collections
 
 
 --
--- Name: directus_comments directus_comments_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_comments directus_comments_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_comments
@@ -4455,7 +3773,7 @@ ALTER TABLE ONLY public.directus_comments
 
 
 --
--- Name: directus_comments directus_comments_user_updated_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_comments directus_comments_user_updated_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_comments
@@ -4463,7 +3781,7 @@ ALTER TABLE ONLY public.directus_comments
 
 
 --
--- Name: directus_dashboards directus_dashboards_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_dashboards directus_dashboards_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_dashboards
@@ -4471,7 +3789,7 @@ ALTER TABLE ONLY public.directus_dashboards
 
 
 --
--- Name: directus_files directus_files_folder_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_files directus_files_folder_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_files
@@ -4479,7 +3797,7 @@ ALTER TABLE ONLY public.directus_files
 
 
 --
--- Name: directus_files directus_files_modified_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_files directus_files_modified_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_files
@@ -4487,7 +3805,7 @@ ALTER TABLE ONLY public.directus_files
 
 
 --
--- Name: directus_files directus_files_uploaded_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_files directus_files_uploaded_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_files
@@ -4495,7 +3813,7 @@ ALTER TABLE ONLY public.directus_files
 
 
 --
--- Name: directus_flows directus_flows_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_flows directus_flows_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_flows
@@ -4503,7 +3821,7 @@ ALTER TABLE ONLY public.directus_flows
 
 
 --
--- Name: directus_folders directus_folders_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_folders directus_folders_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_folders
@@ -4511,7 +3829,7 @@ ALTER TABLE ONLY public.directus_folders
 
 
 --
--- Name: directus_notifications directus_notifications_recipient_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_notifications directus_notifications_recipient_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_notifications
@@ -4519,7 +3837,7 @@ ALTER TABLE ONLY public.directus_notifications
 
 
 --
--- Name: directus_notifications directus_notifications_sender_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_notifications directus_notifications_sender_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_notifications
@@ -4527,7 +3845,7 @@ ALTER TABLE ONLY public.directus_notifications
 
 
 --
--- Name: directus_operations directus_operations_flow_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_flow_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -4535,7 +3853,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_operations directus_operations_reject_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_reject_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -4543,7 +3861,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_operations directus_operations_resolve_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_resolve_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -4551,7 +3869,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_operations directus_operations_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_operations directus_operations_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_operations
@@ -4559,7 +3877,7 @@ ALTER TABLE ONLY public.directus_operations
 
 
 --
--- Name: directus_panels directus_panels_dashboard_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_panels directus_panels_dashboard_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_panels
@@ -4567,7 +3885,7 @@ ALTER TABLE ONLY public.directus_panels
 
 
 --
--- Name: directus_panels directus_panels_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_panels directus_panels_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_panels
@@ -4575,7 +3893,7 @@ ALTER TABLE ONLY public.directus_panels
 
 
 --
--- Name: directus_permissions directus_permissions_policy_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_permissions directus_permissions_policy_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_permissions
@@ -4583,7 +3901,7 @@ ALTER TABLE ONLY public.directus_permissions
 
 
 --
--- Name: directus_presets directus_presets_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_presets directus_presets_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_presets
@@ -4591,7 +3909,7 @@ ALTER TABLE ONLY public.directus_presets
 
 
 --
--- Name: directus_presets directus_presets_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_presets directus_presets_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_presets
@@ -4599,7 +3917,7 @@ ALTER TABLE ONLY public.directus_presets
 
 
 --
--- Name: directus_revisions directus_revisions_activity_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_revisions directus_revisions_activity_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_revisions
@@ -4607,7 +3925,7 @@ ALTER TABLE ONLY public.directus_revisions
 
 
 --
--- Name: directus_revisions directus_revisions_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_revisions directus_revisions_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_revisions
@@ -4615,7 +3933,7 @@ ALTER TABLE ONLY public.directus_revisions
 
 
 --
--- Name: directus_revisions directus_revisions_version_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_revisions directus_revisions_version_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_revisions
@@ -4623,7 +3941,7 @@ ALTER TABLE ONLY public.directus_revisions
 
 
 --
--- Name: directus_roles directus_roles_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_roles directus_roles_parent_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_roles
@@ -4631,7 +3949,7 @@ ALTER TABLE ONLY public.directus_roles
 
 
 --
--- Name: directus_sessions directus_sessions_share_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_sessions directus_sessions_share_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_sessions
@@ -4639,7 +3957,7 @@ ALTER TABLE ONLY public.directus_sessions
 
 
 --
--- Name: directus_sessions directus_sessions_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_sessions directus_sessions_user_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_sessions
@@ -4647,7 +3965,7 @@ ALTER TABLE ONLY public.directus_sessions
 
 
 --
--- Name: directus_settings directus_settings_project_logo_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_project_logo_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4655,7 +3973,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_settings directus_settings_public_background_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_public_background_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4663,7 +3981,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_settings directus_settings_public_favicon_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_public_favicon_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4671,7 +3989,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_settings directus_settings_public_foreground_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_public_foreground_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4679,7 +3997,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_settings directus_settings_public_registration_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_public_registration_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4687,7 +4005,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_settings directus_settings_storage_default_folder_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_settings directus_settings_storage_default_folder_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_settings
@@ -4695,7 +4013,7 @@ ALTER TABLE ONLY public.directus_settings
 
 
 --
--- Name: directus_shares directus_shares_collection_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_shares directus_shares_collection_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_shares
@@ -4703,7 +4021,7 @@ ALTER TABLE ONLY public.directus_shares
 
 
 --
--- Name: directus_shares directus_shares_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_shares directus_shares_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_shares
@@ -4711,7 +4029,7 @@ ALTER TABLE ONLY public.directus_shares
 
 
 --
--- Name: directus_shares directus_shares_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_shares directus_shares_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_shares
@@ -4719,7 +4037,7 @@ ALTER TABLE ONLY public.directus_shares
 
 
 --
--- Name: directus_users directus_users_banner_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_banner_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4727,7 +4045,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_users directus_users_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_users directus_users_role_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_users
@@ -4735,7 +4053,7 @@ ALTER TABLE ONLY public.directus_users
 
 
 --
--- Name: directus_versions directus_versions_collection_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_versions directus_versions_collection_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_versions
@@ -4743,7 +4061,7 @@ ALTER TABLE ONLY public.directus_versions
 
 
 --
--- Name: directus_versions directus_versions_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_versions directus_versions_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_versions
@@ -4751,7 +4069,7 @@ ALTER TABLE ONLY public.directus_versions
 
 
 --
--- Name: directus_versions directus_versions_user_updated_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_versions directus_versions_user_updated_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_versions
@@ -4759,7 +4077,7 @@ ALTER TABLE ONLY public.directus_versions
 
 
 --
--- Name: directus_webhooks directus_webhooks_migrated_flow_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directus_webhooks directus_webhooks_migrated_flow_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.directus_webhooks
@@ -4767,7 +4085,7 @@ ALTER TABLE ONLY public.directus_webhooks
 
 
 --
--- Name: junction_directus_users_files junction_directus_users_files_directus_files_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: junction_directus_users_files junction_directus_users_files_directus_files_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.junction_directus_users_files
@@ -4775,7 +4093,7 @@ ALTER TABLE ONLY public.junction_directus_users_files
 
 
 --
--- Name: junction_directus_users_files junction_directus_users_files_directus_users_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: junction_directus_users_files junction_directus_users_files_directus_users_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.junction_directus_users_files
@@ -4783,7 +4101,7 @@ ALTER TABLE ONLY public.junction_directus_users_files
 
 
 --
--- Name: sexy_articles sexy_articles_author_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_articles sexy_articles_author_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_articles
@@ -4791,7 +4109,7 @@ ALTER TABLE ONLY public.sexy_articles
 
 
 --
--- Name: sexy_articles sexy_articles_image_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_articles sexy_articles_image_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_articles
@@ -4799,7 +4117,7 @@ ALTER TABLE ONLY public.sexy_articles
 
 
 --
--- Name: sexy_articles sexy_articles_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_articles sexy_articles_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_articles
@@ -4807,127 +4125,7 @@ ALTER TABLE ONLY public.sexy_articles
 
 
 --
--- Name: sexy_model_photos sexy_model_photos_directus_files_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_model_photos
-    ADD CONSTRAINT sexy_model_photos_directus_files_id_fkey FOREIGN KEY (directus_files_id) REFERENCES public.directus_files(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_model_photos sexy_model_photos_directus_users_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_model_photos
-    ADD CONSTRAINT sexy_model_photos_directus_users_id_fkey FOREIGN KEY (directus_users_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_recording_plays sexy_recording_plays_recording_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recording_plays
-    ADD CONSTRAINT sexy_recording_plays_recording_id_fkey FOREIGN KEY (recording_id) REFERENCES public.sexy_recordings(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_recording_plays sexy_recording_plays_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recording_plays
-    ADD CONSTRAINT sexy_recording_plays_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_recordings sexy_recordings_linked_video_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recordings
-    ADD CONSTRAINT sexy_recordings_linked_video_fkey FOREIGN KEY (linked_video) REFERENCES public.sexy_videos(id) ON DELETE SET NULL;
-
-
---
--- Name: sexy_recordings sexy_recordings_user_created_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_recordings
-    ADD CONSTRAINT sexy_recordings_user_created_fkey FOREIGN KEY (user_created) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_user_achievements sexy_user_achievements_achievement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_achievements
-    ADD CONSTRAINT sexy_user_achievements_achievement_id_fkey FOREIGN KEY (achievement_id) REFERENCES public.sexy_achievements(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_user_achievements sexy_user_achievements_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_achievements
-    ADD CONSTRAINT sexy_user_achievements_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_user_points sexy_user_points_recording_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_points
-    ADD CONSTRAINT sexy_user_points_recording_id_fkey FOREIGN KEY (recording_id) REFERENCES public.sexy_recordings(id) ON DELETE SET NULL;
-
-
---
--- Name: sexy_user_points sexy_user_points_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_points
-    ADD CONSTRAINT sexy_user_points_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_user_stats sexy_user_stats_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_user_stats
-    ADD CONSTRAINT sexy_user_stats_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_video_likes sexy_video_likes_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_likes
-    ADD CONSTRAINT sexy_video_likes_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_video_likes sexy_video_likes_video_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_likes
-    ADD CONSTRAINT sexy_video_likes_video_id_fkey FOREIGN KEY (video_id) REFERENCES public.sexy_videos(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_video_plays sexy_video_plays_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_plays
-    ADD CONSTRAINT sexy_video_plays_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE SET NULL;
-
-
---
--- Name: sexy_video_plays sexy_video_plays_video_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_video_plays
-    ADD CONSTRAINT sexy_video_plays_video_id_fkey FOREIGN KEY (video_id) REFERENCES public.sexy_videos(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_videos_directus_users sexy_videos_directus_users_directus_users_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users sexy_videos_directus_users_directus_users_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos_directus_users
@@ -4935,7 +4133,7 @@ ALTER TABLE ONLY public.sexy_videos_directus_users
 
 
 --
--- Name: sexy_videos_directus_users sexy_videos_directus_users_sexy_videos_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos_directus_users sexy_videos_directus_users_sexy_videos_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos_directus_users
@@ -4943,7 +4141,7 @@ ALTER TABLE ONLY public.sexy_videos_directus_users
 
 
 --
--- Name: sexy_videos sexy_videos_image_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos sexy_videos_image_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos
@@ -4951,23 +4149,7 @@ ALTER TABLE ONLY public.sexy_videos
 
 
 --
--- Name: sexy_videos_models sexy_videos_models_directus_users_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_videos_models
-    ADD CONSTRAINT sexy_videos_models_directus_users_id_fkey FOREIGN KEY (directus_users_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_videos_models sexy_videos_models_sexy_videos_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sexy_videos_models
-    ADD CONSTRAINT sexy_videos_models_sexy_videos_id_fkey FOREIGN KEY (sexy_videos_id) REFERENCES public.sexy_videos(id) ON DELETE CASCADE;
-
-
---
--- Name: sexy_videos sexy_videos_movie_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos sexy_videos_movie_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos
@@ -4975,7 +4157,7 @@ ALTER TABLE ONLY public.sexy_videos
 
 
 --
--- Name: sexy_videos sexy_videos_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sexy_videos sexy_videos_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: valknar
 --
 
 ALTER TABLE ONLY public.sexy_videos
@@ -4983,8 +4165,16 @@ ALTER TABLE ONLY public.sexy_videos
 
 
 --
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict tAmOMYhnzidh4M1vxfBPwLdhU0fgoXK50QLIHhVGSjxWfBKUxdywslE1xqkN7nq
+\unrestrict kHaSmq4pzphfyKS1cgbEfBxXPPJEZNokzfZYTVTz0MdM9wEWRpxGHentE1L9eUf
 
