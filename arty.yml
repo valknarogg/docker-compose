@@ -109,6 +109,7 @@ scripts:
   # Import PostgreSQL database from SQL dump
   # WARNING: This will DROP existing tables if they exist (uses --clean --if-exists)
   sexy/db/import: |
+    set -a && source .env && set +a &&
     echo "⚠️  WARNING: This will replace the current database!" &&
     echo "Make sure core_postgres container is running..." &&
     docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
@@ -132,6 +133,7 @@ scripts:
   # Step 1: Import database (drops/recreates all tables)
   # Step 2: Apply schema (updates Directus metadata)
   sexy/import/all: |
+    set -a && source .env && set +a &&
     echo "⚠️  WARNING: This will completely replace the database and schema!" &&
     echo "Importing database..." &&
     docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
