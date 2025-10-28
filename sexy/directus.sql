@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict Nx2I5D5x585cehiRayweeNfgBwGvlNIChpKTxJ24eHXvATMMgd8mLPailihNsDv
+\restrict ivu3VjNHP3NwggAF0b1v8SBQfAoLpCqOVi2HaUk4qIFPyodgHm5zfwedlJt7FCL
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -29,6 +29,8 @@ ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sex
 ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sexy_video_plays_user_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_video_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_user_created_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_linked_video_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_users_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_files_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_articles DROP CONSTRAINT IF EXISTS sexy_articles_user_created_foreign;
@@ -87,6 +89,11 @@ DROP INDEX IF EXISTS public.sexy_video_plays_user_id_idx;
 DROP INDEX IF EXISTS public.sexy_video_plays_session_id_idx;
 DROP INDEX IF EXISTS public.sexy_video_likes_video_id_idx;
 DROP INDEX IF EXISTS public.sexy_video_likes_user_id_idx;
+DROP INDEX IF EXISTS public.sexy_recordings_user_created_idx;
+DROP INDEX IF EXISTS public.sexy_recordings_tags_idx;
+DROP INDEX IF EXISTS public.sexy_recordings_status_idx;
+DROP INDEX IF EXISTS public.sexy_recordings_slug_idx;
+DROP INDEX IF EXISTS public.sexy_recordings_linked_video_idx;
 DROP INDEX IF EXISTS public.sexy_model_photos_users_id_idx;
 DROP INDEX IF EXISTS public.sexy_model_photos_files_id_idx;
 DROP INDEX IF EXISTS public.sexy_articles_slug_index;
@@ -98,6 +105,8 @@ ALTER TABLE IF EXISTS ONLY public.sexy_videos_directus_users DROP CONSTRAINT IF 
 ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sexy_video_plays_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_video_id_user_id_key;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_slug_key;
+ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_users_id_directus_files_id_key;
 ALTER TABLE IF EXISTS ONLY public.sexy_articles DROP CONSTRAINT IF EXISTS sexy_articles_slug_unique;
@@ -157,6 +166,7 @@ DROP TABLE IF EXISTS public.sexy_videos_directus_users;
 DROP TABLE IF EXISTS public.sexy_videos;
 DROP TABLE IF EXISTS public.sexy_video_plays;
 DROP TABLE IF EXISTS public.sexy_video_likes;
+DROP TABLE IF EXISTS public.sexy_recordings;
 DROP SEQUENCE IF EXISTS public.sexy_model_photos_id_seq;
 DROP TABLE IF EXISTS public.sexy_model_photos;
 DROP TABLE IF EXISTS public.sexy_articles;
@@ -1174,6 +1184,31 @@ ALTER SEQUENCE public.sexy_model_photos_id_seq OWNER TO sexy;
 
 ALTER SEQUENCE public.sexy_model_photos_id_seq OWNED BY public.sexy_model_photos.id;
 
+
+--
+-- Name: sexy_recordings; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_recordings (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    title character varying(255) NOT NULL,
+    description text,
+    slug character varying(255) NOT NULL,
+    duration integer NOT NULL,
+    events jsonb NOT NULL,
+    device_info jsonb NOT NULL,
+    tags text[] DEFAULT '{}'::text[],
+    linked_video uuid,
+    status character varying(50) DEFAULT 'draft'::character varying,
+    public boolean DEFAULT false,
+    user_created uuid,
+    user_updated uuid,
+    date_created timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    date_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.sexy_recordings OWNER TO sexy;
 
 --
 -- Name: sexy_video_likes; Type: TABLE; Schema: public; Owner: sexy
@@ -2426,6 +2461,11 @@ COPY public.directus_activity (id, action, "user", "timestamp", ip, user_agent, 
 1012	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:21:11.728+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_videos	75296c46-3c71-4182-a4ce-416722377d76	https://sexy.pivoine.art
 1014	update	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:24:35.626+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_videos	299cf96a-8cfc-43d4-81a9-41c5f327808f	https://sexy.pivoine.art
 1013	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:23:22.089+00	78.51.149.168	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	https://sexy.pivoine.art
+1017	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:10:51.794+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	http://localhost:3000
+1018	create	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:11:25.319+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	sexy_video_likes	36d416db-a410-45b3-8664-150c0ca96b41	http://localhost:3000
+1019	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:14:45.393+00	172.20.0.1	curl/8.14.1	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	\N
+1020	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:20:26.164+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	http://localhost:3000
+1021	login	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:30:46.559+00	172.20.0.1	curl/8.14.1	directus_users	4d310101-f7b1-47fe-982a-efe4abf25c55	\N
 \.
 
 
@@ -3367,6 +3407,7 @@ COPY public.directus_revisions (id, activity, collection, item, data, delta, par
 579	792	directus_fields	68	{"id":68,"collection":"sexy_videos","field":"image","special":["file"],"interface":"file-image","options":{"folder":"7360b85c-3bb7-4334-ba81-2f46575ea056"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":8,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"image","sort":8,"group":null}	\N	\N
 580	793	directus_fields	83	{"id":83,"collection":"sexy_videos","field":"movie","special":["file"],"interface":"file","options":{"folder":"3f83c727-9c90-4e0d-871f-ab81c295043a","filter":{"_and":[{"type":{"_eq":"video/mp4"}}]}},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":9,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"movie","sort":9,"group":null}	\N	\N
 581	794	directus_fields	79	{"id":79,"collection":"sexy_videos","field":"models","special":["m2m"],"interface":"list-m2m","options":null,"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":10,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"models","sort":10,"group":null}	\N	\N
+750	1018	sexy_video_likes	36d416db-a410-45b3-8664-150c0ca96b41	{"video_id":"75296c46-3c71-4182-a4ce-416722377d76","user_id":"4d310101-f7b1-47fe-982a-efe4abf25c55"}	{"video_id":"75296c46-3c71-4182-a4ce-416722377d76","user_id":"4d310101-f7b1-47fe-982a-efe4abf25c55"}	\N	\N
 582	795	directus_fields	70	{"id":70,"collection":"sexy_videos","field":"upload_date","special":null,"interface":"datetime","options":null,"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":11,"width":"full","translations":null,"note":null,"conditions":null,"required":true,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"upload_date","sort":11,"group":null}	\N	\N
 583	796	directus_fields	71	{"id":71,"collection":"sexy_videos","field":"premium","special":["cast-boolean"],"interface":"boolean","options":{"label":"Premium"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":12,"width":"full","translations":null,"note":null,"conditions":null,"required":false,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"premium","sort":12,"group":null}	\N	\N
 584	797	directus_fields	72	{"id":72,"collection":"sexy_videos","field":"featured","special":["cast-boolean"],"interface":"boolean","options":{"label":"Featured"},"display":null,"display_options":null,"readonly":false,"hidden":false,"sort":13,"width":"full","translations":null,"note":null,"conditions":null,"required":false,"group":null,"validation":null,"validation_message":null}	{"collection":"sexy_videos","field":"featured","sort":13,"group":null}	\N	\N
@@ -3552,6 +3593,10 @@ f1d1d90f-9a4a-4199-bc70-f9cd3cccd99f	Editor	ink_pen	As an editor i can write mag
 
 COPY public.directus_sessions (token, "user", expires, ip, user_agent, share, origin, next_token) FROM stdin;
 O-XfFP0NCal8BHe52BdxJLIF-nYn9lYUAi5Ti86Dk4T64BxKySiz2V8eiTpupMHo	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:01:53.126+00	172.20.0.1	curl/8.14.1	\N	\N	\N
+l-tn6nS7v-4oW96rf3CzKL9aRKurTH7-yrXCEAEa15hza_vzECbPDwkMxgiacU3Q	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:10:51.781+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	http://localhost:3000	\N
+Gs_dEs6es7D0SpYCFJ1BQxkylO0521osHHACTT9hZmkGciMH57gHtmakqxxUIMWF	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:14:45.384+00	172.20.0.1	curl/8.14.1	\N	\N	\N
+-D-xEZyNTaSzSNtvW7QnlUVjpE_chwaJXdcPBgxyckEiAOBk4CzBp-Yhs8KSwjXZ	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:20:26.159+00	172.20.0.1	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36	\N	http://localhost:3000	\N
+bc2je3aQc50QusCVjISe4XpF08tRM0wVeHJr4lHAZuNPFlmqQYIt45SBfl0sBDe-	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-11-04 11:30:46.54+00	172.20.0.1	curl/8.14.1	\N	\N	\N
 \.
 
 
@@ -3586,7 +3631,7 @@ COPY public.directus_translations (id, language, key, value) FROM stdin;
 
 COPY public.directus_users (id, first_name, last_name, email, password, location, title, description, tags, avatar, language, tfa_secret, status, role, token, last_access, last_page, provider, external_identifier, auth_data, email_notifications, appearance, theme_dark, theme_light, theme_light_overrides, theme_dark_overrides, text_direction, website, slug, join_date, featured, artist_name, banner) FROM stdin;
 543f4d0b-e346-4e5e-8aca-4a9b35d5fab6	Palina	Rojinski	palina@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$ad2kKJ4YUQwjIpPCN/CdhQ$LwyZbpm0bx+p49y9x02UFNI4GepTW4vIrFaN3tuIs0E	\N	\N	Award-winning model, dancer and actress with 15+ years of experience.	["Love","Sex","Design","Art"]	b85b3008-f592-4676-8c84-666e0a60423d	\N	\N	active	55da25e6-9a87-4264-92e8-9066fdcf9c07	\N	\N	\N	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	luna-belle	2025-09-09 12:00:00	t	Luna Belle	cecf7ce8-388a-43a9-b9bc-2ab4d44d3f7f
-4d310101-f7b1-47fe-982a-efe4abf25c55	Sebastian	Krüger	valknar@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$Z0DGbR7usavt6jP8lEDXCg$2VspGk40ICKo2PraYaBhAuRCm6+5DuCjDeSjqDzH7S0	\N	\N	Visionary leader with 15+ years in digital media and content creation.	["Love","Sex","Design","Art"]	e77c58c1-f718-4b7a-b34c-c42861c8122f	\N	\N	active	ea3a9127-2b65-462c-85a8-dbafe9b4fe24	\N	2025-10-28 11:01:53.14+00	/content/sexy_videos	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	valknar	2025-09-09 12:00:00	t	Valknar	d3f53a9b-bbce-436c-a6f4-04e5ef120d7e
+4d310101-f7b1-47fe-982a-efe4abf25c55	Sebastian	Krüger	valknar@pivoine.art	$argon2id$v=19$m=65536,t=3,p=4$Z0DGbR7usavt6jP8lEDXCg$2VspGk40ICKo2PraYaBhAuRCm6+5DuCjDeSjqDzH7S0	\N	\N	Visionary leader with 15+ years in digital media and content creation.	["Love","Sex","Design","Art"]	e77c58c1-f718-4b7a-b34c-c42861c8122f	\N	\N	active	ea3a9127-2b65-462c-85a8-dbafe9b4fe24	\N	2025-10-28 11:30:46.568+00	/content/sexy_videos	default	\N	\N	t	\N	\N	\N	\N	\N	auto	pivoine.art	valknar	2025-09-09 12:00:00	t	Valknar	d3f53a9b-bbce-436c-a6f4-04e5ef120d7e
 \.
 
 
@@ -3641,10 +3686,19 @@ COPY public.sexy_model_photos (id, directus_users_id, directus_files_id, date_cr
 
 
 --
+-- Data for Name: sexy_recordings; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_recordings (id, title, description, slug, duration, events, device_info, tags, linked_video, status, public, user_created, user_updated, date_created, date_updated) FROM stdin;
+\.
+
+
+--
 -- Data for Name: sexy_video_likes; Type: TABLE DATA; Schema: public; Owner: sexy
 --
 
 COPY public.sexy_video_likes (id, video_id, user_id, date_created) FROM stdin;
+36d416db-a410-45b3-8664-150c0ca96b41	75296c46-3c71-4182-a4ce-416722377d76	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-28 11:11:25.30707+00
 \.
 
 
@@ -3661,8 +3715,8 @@ COPY public.sexy_video_plays (id, video_id, user_id, session_id, duration_watche
 --
 
 COPY public.sexy_videos (id, status, user_created, date_created, date_updated, slug, title, image, upload_date, premium, featured, tags, movie, description, likes_count, plays_count, views_count) FROM stdin;
-75296c46-3c71-4182-a4ce-416722377d76	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-26 13:56:55.554+00	2025-10-08 02:21:11.727+00	sexyart-sexybelle	SexyArt - SexyBelle	bab78ff3-10bf-4fc6-9e3a-6e58bb6655b1	2025-09-26 15:48:00	\N	t	["Funky","Sex","Love","Kiss"]	3001a83c-3033-4dd1-b3ac-c910bdb1ef2c	Comin' Soon!!!!!!	0	0	0
 299cf96a-8cfc-43d4-81a9-41c5f327808f	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-10-08 02:21:02.825+00	2025-10-08 02:30:35.159+00	sexyart-in-the-opera	SexyArt - In The Opera	b5c8e028-43c0-4eea-9b69-a3478d3f219b	2025-10-08 00:24:00	\N	t	["Mature","Sex","Love","Music"]	009f5bad-9a8a-401e-9cb1-5792fa41337f	Mit Gewitter und Sturm aus fernem Meer -\nMein Mädel, bin dir nah'! Hurrah!\nHurrah! Über turmhohe Flut vom Süden her\nMein Mädel, ich bin da! Hurrah!\nMein Mädel, wenn nicht Südwind wär\nIch nimmer wohl käm' zu dir;\nAch lieber Südwind, blas' noch mehr\nMein Mädel verlangt nach mir . .	0	0	0
+75296c46-3c71-4182-a4ce-416722377d76	published	4d310101-f7b1-47fe-982a-efe4abf25c55	2025-09-26 13:56:55.554+00	2025-10-28 11:11:25.349+00	sexyart-sexybelle	SexyArt - SexyBelle	bab78ff3-10bf-4fc6-9e3a-6e58bb6655b1	2025-09-26 15:48:00	\N	t	["Funky","Sex","Love","Kiss"]	3001a83c-3033-4dd1-b3ac-c910bdb1ef2c	Comin' Soon!!!!!!	1	0	0
 \.
 
 
@@ -3689,7 +3743,7 @@ COPY public.sexy_videos_models (id, sexy_videos_id, directus_users_id, date_crea
 -- Name: directus_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sexy
 --
 
-SELECT pg_catalog.setval('public.directus_activity_id_seq', 1016, true);
+SELECT pg_catalog.setval('public.directus_activity_id_seq', 1021, true);
 
 
 --
@@ -3731,7 +3785,7 @@ SELECT pg_catalog.setval('public.directus_relations_id_seq', 27, true);
 -- Name: directus_revisions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sexy
 --
 
-SELECT pg_catalog.setval('public.directus_revisions_id_seq', 749, true);
+SELECT pg_catalog.setval('public.directus_revisions_id_seq', 750, true);
 
 
 --
@@ -4089,6 +4143,22 @@ ALTER TABLE ONLY public.sexy_model_photos
 
 
 --
+-- Name: sexy_recordings sexy_recordings_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recordings
+    ADD CONSTRAINT sexy_recordings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sexy_recordings sexy_recordings_slug_key; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recordings
+    ADD CONSTRAINT sexy_recordings_slug_key UNIQUE (slug);
+
+
+--
 -- Name: sexy_video_likes sexy_video_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
 --
 
@@ -4170,6 +4240,41 @@ CREATE INDEX sexy_model_photos_files_id_idx ON public.sexy_model_photos USING bt
 --
 
 CREATE INDEX sexy_model_photos_users_id_idx ON public.sexy_model_photos USING btree (directus_users_id);
+
+
+--
+-- Name: sexy_recordings_linked_video_idx; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX sexy_recordings_linked_video_idx ON public.sexy_recordings USING btree (linked_video);
+
+
+--
+-- Name: sexy_recordings_slug_idx; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX sexy_recordings_slug_idx ON public.sexy_recordings USING btree (slug);
+
+
+--
+-- Name: sexy_recordings_status_idx; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX sexy_recordings_status_idx ON public.sexy_recordings USING btree (status);
+
+
+--
+-- Name: sexy_recordings_tags_idx; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX sexy_recordings_tags_idx ON public.sexy_recordings USING gin (tags);
+
+
+--
+-- Name: sexy_recordings_user_created_idx; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX sexy_recordings_user_created_idx ON public.sexy_recordings USING btree (user_created);
 
 
 --
@@ -4630,6 +4735,22 @@ ALTER TABLE ONLY public.sexy_model_photos
 
 
 --
+-- Name: sexy_recordings sexy_recordings_linked_video_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recordings
+    ADD CONSTRAINT sexy_recordings_linked_video_fkey FOREIGN KEY (linked_video) REFERENCES public.sexy_videos(id) ON DELETE SET NULL;
+
+
+--
+-- Name: sexy_recordings sexy_recordings_user_created_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recordings
+    ADD CONSTRAINT sexy_recordings_user_created_fkey FOREIGN KEY (user_created) REFERENCES public.directus_users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: sexy_video_likes sexy_video_likes_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
 --
 
@@ -4729,5 +4850,5 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Nx2I5D5x585cehiRayweeNfgBwGvlNIChpKTxJ24eHXvATMMgd8mLPailihNsDv
+\unrestrict ivu3VjNHP3NwggAF0b1v8SBQfAoLpCqOVi2HaUk4qIFPyodgHm5zfwedlJt7FCL
 
