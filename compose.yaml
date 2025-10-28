@@ -4,7 +4,7 @@ include:
   - awsm/compose.yaml
   - sexy/compose.yaml
   - gotify/compose.yaml
-  - track/compose.yaml
+  - umami/compose.yaml
   - proxy/compose.yaml
 
 networks:

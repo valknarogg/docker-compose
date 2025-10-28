@@ -70,84 +70,79 @@ scripts:
   # Database export scripts for sexy.pivoine.art
   # Export PostgreSQL database schema and data with DROP IF EXISTS statements
   sexy/db/export: |
-    docker exec sexy_postgres pg_dump \
+    docker exec core_postgres pg_dump \
       -U sexy \
       -d sexy \
       --no-owner \
       --no-acl \
       --clean \
       --if-exists \
-      > ~/Projects/docker-compose/sexy/directus.sql && \
+      > ~/Projects/docker-compose/sexy/directus.sql &&
     echo "Database exported to ~/Projects/docker-compose/sexy/directus.sql"
 
   # Export Directus schema.yaml (collections, fields, relations, etc.)
   sexy/schema/export: |
-    docker exec sexy_api mkdir -p /directus/snapshots && \
-    docker exec sexy_api npx directus schema snapshot /directus/snapshots/schema.yaml && \
-    docker cp sexy_api:/directus/snapshots/schema.yaml ~/Projects/docker-compose/sexy/schema.yaml && \
+    docker exec sexy_api mkdir -p /directus/snapshots &&
+    docker exec sexy_api npx directus schema snapshot /directus/snapshots/schema.yaml &&
+    docker cp sexy_api:/directus/snapshots/schema.yaml ~/Projects/docker-compose/sexy/schema.yaml &&
     echo "Directus schema exported to ~/Projects/docker-compose/sexy/schema.yaml"
 
   # Combined export: both database and schema
   sexy/export/all: |
-    echo "Exporting database..." && \
-    docker exec sexy_postgres pg_dump \
+    echo "Exporting database..." &&
+    docker exec core_postgres pg_dump \
       -U sexy \
       -d sexy \
       --no-owner \
       --no-acl \
       --clean \
       --if-exists \
-      > ~/Projects/docker-compose/sexy/directus.sql && \
-    echo "✓ Database exported" && \
-    echo "Exporting Directus schema..." && \
-    docker exec sexy_api mkdir -p /directus/snapshots && \
-    docker exec sexy_api npx directus schema snapshot /directus/snapshots/schema.yaml && \
-    docker cp sexy_api:/directus/snapshots/schema.yaml ~/Projects/docker-compose/sexy/schema.yaml && \
-    echo "✓ Directus schema exported" && \
+      > ~/Projects/docker-compose/sexy/directus.sql &&
+    echo "✓ Database exported" &&
+    echo "Exporting Directus schema..." &&
+    docker exec sexy_api mkdir -p /directus/snapshots &&
+    docker exec sexy_api npx directus schema snapshot /directus/snapshots/schema.yaml &&
+    docker cp sexy_api:/directus/snapshots/schema.yaml ~/Projects/docker-compose/sexy/schema.yaml &&
+    echo "✓ Directus schema exported" &&
     echo "All exports completed successfully!"
 
   # Import PostgreSQL database from SQL dump
   # WARNING: This will DROP existing tables if they exist (uses --clean --if-exists)
   sexy/db/import: |
-    echo "⚠️  WARNING: This will replace the current database!" && \
-    echo "Make sure sexy_postgres container is running..." && \
-    docker exec -i sexy_postgres psql -U sexy -d sexy < ~/Projects/docker-compose/sexy/directus.sql && \
-    echo "✓ Database imported from ~/Projects/docker-compose/sexy/directus.sql" && \
-    echo "Restarting Directus API..." && \
-    docker restart sexy_api && \
+    echo "⚠️  WARNING: This will replace the current database!" &&
+    echo "Make sure core_postgres container is running..." &&
+    docker exec -i core_postgres psql -U sexy -d sexy < ~/Projects/docker-compose/sexy/directus.sql &&
+    echo "✓ Database imported from ~/Projects/docker-compose/sexy/directus.sql" &&
+    echo "Restarting Directus API..." &&
+    docker restart sexy_api &&
     echo "✓ Import completed successfully!"
 
   # Apply Directus schema snapshot (collections, fields, relations)
   # This uses 'directus schema apply' which is non-destructive by default
   sexy/schema/import: |
-    echo "Applying Directus schema snapshot..." && \
-    docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml && \
-    docker exec sexy_api npx directus schema apply --yes /directus/schema.yaml && \
-    echo "✓ Directus schema applied from ~/Projects/docker-compose/sexy/schema.yaml" && \
-    echo "Restarting Directus API..." && \
-    docker restart sexy_api && \
+    echo "Applying Directus schema snapshot..." &&
+    docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml &&
+    docker exec sexy_api npx directus schema apply --yes /directus/schema.yaml &&
+    echo "✓ Directus schema applied from ~/Projects/docker-compose/sexy/schema.yaml" &&
+    echo "Restarting Directus API..." &&
+    docker restart sexy_api &&
     echo "✓ Schema import completed successfully!"
 
   # Combined import: database and schema (use with caution!)
   # Step 1: Import database (drops/recreates all tables)
   # Step 2: Apply schema (updates Directus metadata)
   sexy/import/all: |
-    echo "⚠️  WARNING: This will completely replace the database and schema!" && \
-    read -p "Are you sure? Type 'yes' to continue: " confirm && \
-    if [ "$confirm" = "yes" ]; then \
-      echo "Importing database..." && \
-      docker exec -i sexy_postgres psql -U sexy -d sexy < ~/Projects/docker-compose/sexy/directus.sql && \
-      echo "✓ Database imported" && \
-      echo "Applying Directus schema..." && \
-      docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml && \
-      docker exec sexy_api npx directus schema apply --yes /directus/schema.yaml && \
-      echo "✓ Schema applied" && \
-      echo "Restarting Directus API..." && \
-      docker restart sexy_api && \
-      echo "✓✓✓ Complete import finished successfully!"; \
-    else \
-      echo "Import cancelled."; \
-    fi
+    echo "⚠️  WARNING: This will completely replace the database and schema!" &&
+    echo "Importing database..." &&
+    docker exec -i core_postgres psql -U sexy -d sexy < ~/Projects/docker-compose/sexy/directus.sql &&
+    echo "✓ Database imported" &&
+    echo "Applying Directus schema..." &&
+    docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml &&
+    docker exec sexy_api npx directus schema apply --yes /directus/schema.yaml &&
+    echo "✓ Schema applied" &&
+    echo "Restarting Directus API..." &&
+    docker restart sexy_api &&
+    echo "✓✓✓ Complete import finished successfully!"
 
   sexy/uploads/export: |
     rm -rf sexy/uploads
