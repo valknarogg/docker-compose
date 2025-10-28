@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ivu3VjNHP3NwggAF0b1v8SBQfAoLpCqOVi2HaUk4qIFPyodgHm5zfwedlJt7FCL
+\restrict E9Q5asC8Y4qbOzEEqbhDkKKxddsl3yTWYcQ4w5feIUp8ybYcX7pwih7N16ll0Lm
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -29,8 +29,15 @@ ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sex
 ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sexy_video_plays_user_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_video_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_stats DROP CONSTRAINT IF EXISTS sexy_user_stats_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_points DROP CONSTRAINT IF EXISTS sexy_user_points_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_points DROP CONSTRAINT IF EXISTS sexy_user_points_recording_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_achievements DROP CONSTRAINT IF EXISTS sexy_user_achievements_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_achievements DROP CONSTRAINT IF EXISTS sexy_user_achievements_achievement_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_user_created_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_linked_video_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recording_plays DROP CONSTRAINT IF EXISTS sexy_recording_plays_user_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recording_plays DROP CONSTRAINT IF EXISTS sexy_recording_plays_recording_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_users_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_files_id_fkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_articles DROP CONSTRAINT IF EXISTS sexy_articles_user_created_foreign;
@@ -97,6 +104,19 @@ DROP INDEX IF EXISTS public.sexy_recordings_linked_video_idx;
 DROP INDEX IF EXISTS public.sexy_model_photos_users_id_idx;
 DROP INDEX IF EXISTS public.sexy_model_photos_files_id_idx;
 DROP INDEX IF EXISTS public.sexy_articles_slug_index;
+DROP INDEX IF EXISTS public.idx_user_stats_weighted;
+DROP INDEX IF EXISTS public.idx_user_stats_user;
+DROP INDEX IF EXISTS public.idx_user_points_user;
+DROP INDEX IF EXISTS public.idx_user_points_date;
+DROP INDEX IF EXISTS public.idx_user_points_action;
+DROP INDEX IF EXISTS public.idx_user_achievements_user;
+DROP INDEX IF EXISTS public.idx_user_achievements_unlocked;
+DROP INDEX IF EXISTS public.idx_user_achievements_achievement;
+DROP INDEX IF EXISTS public.idx_recording_plays_user;
+DROP INDEX IF EXISTS public.idx_recording_plays_recording;
+DROP INDEX IF EXISTS public.idx_recording_plays_date;
+DROP INDEX IF EXISTS public.idx_achievements_code;
+DROP INDEX IF EXISTS public.idx_achievements_category;
 DROP INDEX IF EXISTS public.directus_users_slug_index;
 ALTER TABLE IF EXISTS ONLY public.sexy_videos DROP CONSTRAINT IF EXISTS sexy_videos_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_videos_models DROP CONSTRAINT IF EXISTS sexy_videos_models_sexy_videos_id_directus_users_id_key;
@@ -105,12 +125,20 @@ ALTER TABLE IF EXISTS ONLY public.sexy_videos_directus_users DROP CONSTRAINT IF 
 ALTER TABLE IF EXISTS ONLY public.sexy_video_plays DROP CONSTRAINT IF EXISTS sexy_video_plays_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_video_id_user_id_key;
 ALTER TABLE IF EXISTS ONLY public.sexy_video_likes DROP CONSTRAINT IF EXISTS sexy_video_likes_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_stats DROP CONSTRAINT IF EXISTS sexy_user_stats_user_id_key;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_stats DROP CONSTRAINT IF EXISTS sexy_user_stats_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_points DROP CONSTRAINT IF EXISTS sexy_user_points_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_achievements DROP CONSTRAINT IF EXISTS sexy_user_achievements_user_id_achievement_id_key;
+ALTER TABLE IF EXISTS ONLY public.sexy_user_achievements DROP CONSTRAINT IF EXISTS sexy_user_achievements_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_slug_key;
 ALTER TABLE IF EXISTS ONLY public.sexy_recordings DROP CONSTRAINT IF EXISTS sexy_recordings_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_recording_plays DROP CONSTRAINT IF EXISTS sexy_recording_plays_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_pkey;
 ALTER TABLE IF EXISTS ONLY public.sexy_model_photos DROP CONSTRAINT IF EXISTS sexy_model_photos_directus_users_id_directus_files_id_key;
 ALTER TABLE IF EXISTS ONLY public.sexy_articles DROP CONSTRAINT IF EXISTS sexy_articles_slug_unique;
 ALTER TABLE IF EXISTS ONLY public.sexy_articles DROP CONSTRAINT IF EXISTS sexy_articles_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_achievements DROP CONSTRAINT IF EXISTS sexy_achievements_pkey;
+ALTER TABLE IF EXISTS ONLY public.sexy_achievements DROP CONSTRAINT IF EXISTS sexy_achievements_code_key;
 ALTER TABLE IF EXISTS ONLY public.junction_directus_users_files DROP CONSTRAINT IF EXISTS junction_directus_users_files_pkey;
 ALTER TABLE IF EXISTS ONLY public.directus_webhooks DROP CONSTRAINT IF EXISTS directus_webhooks_pkey;
 ALTER TABLE IF EXISTS ONLY public.directus_versions DROP CONSTRAINT IF EXISTS directus_versions_pkey;
@@ -166,10 +194,15 @@ DROP TABLE IF EXISTS public.sexy_videos_directus_users;
 DROP TABLE IF EXISTS public.sexy_videos;
 DROP TABLE IF EXISTS public.sexy_video_plays;
 DROP TABLE IF EXISTS public.sexy_video_likes;
+DROP TABLE IF EXISTS public.sexy_user_stats;
+DROP TABLE IF EXISTS public.sexy_user_points;
+DROP TABLE IF EXISTS public.sexy_user_achievements;
 DROP TABLE IF EXISTS public.sexy_recordings;
+DROP TABLE IF EXISTS public.sexy_recording_plays;
 DROP SEQUENCE IF EXISTS public.sexy_model_photos_id_seq;
 DROP TABLE IF EXISTS public.sexy_model_photos;
 DROP TABLE IF EXISTS public.sexy_articles;
+DROP TABLE IF EXISTS public.sexy_achievements;
 DROP SEQUENCE IF EXISTS public.junction_directus_users_files_id_seq;
 DROP TABLE IF EXISTS public.junction_directus_users_files;
 DROP SEQUENCE IF EXISTS public.directus_webhooks_id_seq;
@@ -1124,6 +1157,47 @@ ALTER SEQUENCE public.junction_directus_users_files_id_seq OWNED BY public.junct
 
 
 --
+-- Name: sexy_achievements; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_achievements (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    code character varying(50) NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    icon character varying(255),
+    category character varying(50) NOT NULL,
+    required_count integer,
+    points_reward integer DEFAULT 0,
+    sort integer DEFAULT 0,
+    status character varying(20) DEFAULT 'published'::character varying
+);
+
+
+ALTER TABLE public.sexy_achievements OWNER TO sexy;
+
+--
+-- Name: TABLE sexy_achievements; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON TABLE public.sexy_achievements IS 'Predefined achievement definitions for gamification';
+
+
+--
+-- Name: COLUMN sexy_achievements.code; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_achievements.code IS 'Unique code used in backend logic (e.g., first_recording, play_100)';
+
+
+--
+-- Name: COLUMN sexy_achievements.category; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_achievements.category IS 'Achievement category: recordings, playback, social, special';
+
+
+--
 -- Name: sexy_articles; Type: TABLE; Schema: public; Owner: sexy
 --
 
@@ -1186,6 +1260,37 @@ ALTER SEQUENCE public.sexy_model_photos_id_seq OWNED BY public.sexy_model_photos
 
 
 --
+-- Name: sexy_recording_plays; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_recording_plays (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    recording_id uuid NOT NULL,
+    duration_played integer,
+    completed boolean DEFAULT false,
+    date_created timestamp with time zone DEFAULT now(),
+    date_updated timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.sexy_recording_plays OWNER TO sexy;
+
+--
+-- Name: TABLE sexy_recording_plays; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON TABLE public.sexy_recording_plays IS 'Tracks user playback of recordings for analytics and gamification';
+
+
+--
+-- Name: COLUMN sexy_recording_plays.completed; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_recording_plays.completed IS 'True if user watched at least 90% of the recording';
+
+
+--
 -- Name: sexy_recordings; Type: TABLE; Schema: public; Owner: sexy
 --
 
@@ -1209,6 +1314,126 @@ CREATE TABLE public.sexy_recordings (
 
 
 ALTER TABLE public.sexy_recordings OWNER TO sexy;
+
+--
+-- Name: sexy_user_achievements; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_user_achievements (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    achievement_id uuid NOT NULL,
+    progress integer DEFAULT 0,
+    date_unlocked timestamp with time zone
+);
+
+
+ALTER TABLE public.sexy_user_achievements OWNER TO sexy;
+
+--
+-- Name: TABLE sexy_user_achievements; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON TABLE public.sexy_user_achievements IS 'Tracks which achievements users have unlocked';
+
+
+--
+-- Name: COLUMN sexy_user_achievements.progress; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_achievements.progress IS 'Current progress (e.g., 7/10 recordings created)';
+
+
+--
+-- Name: COLUMN sexy_user_achievements.date_unlocked; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_achievements.date_unlocked IS 'NULL if achievement not yet unlocked';
+
+
+--
+-- Name: sexy_user_points; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_user_points (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    points integer NOT NULL,
+    recording_id uuid,
+    date_created timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.sexy_user_points OWNER TO sexy;
+
+--
+-- Name: TABLE sexy_user_points; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON TABLE public.sexy_user_points IS 'Individual point-earning actions for gamification system';
+
+
+--
+-- Name: COLUMN sexy_user_points.action; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_points.action IS 'Type of action: RECORDING_CREATE, RECORDING_PLAY, RECORDING_COMPLETE, COMMENT_CREATE, RECORDING_FEATURED';
+
+
+--
+-- Name: COLUMN sexy_user_points.points; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_points.points IS 'Raw points before time-weighted decay calculation';
+
+
+--
+-- Name: sexy_user_stats; Type: TABLE; Schema: public; Owner: sexy
+--
+
+CREATE TABLE public.sexy_user_stats (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    total_raw_points integer DEFAULT 0,
+    total_weighted_points numeric(10,2) DEFAULT 0,
+    recordings_count integer DEFAULT 0,
+    playbacks_count integer DEFAULT 0,
+    comments_count integer DEFAULT 0,
+    achievements_count integer DEFAULT 0,
+    last_updated timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.sexy_user_stats OWNER TO sexy;
+
+--
+-- Name: TABLE sexy_user_stats; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON TABLE public.sexy_user_stats IS 'Cached user statistics for fast leaderboard queries';
+
+
+--
+-- Name: COLUMN sexy_user_stats.total_raw_points; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_stats.total_raw_points IS 'Sum of all points without time decay';
+
+
+--
+-- Name: COLUMN sexy_user_stats.total_weighted_points; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_stats.total_weighted_points IS 'Time-weighted score using exponential decay (λ=0.005)';
+
+
+--
+-- Name: COLUMN sexy_user_stats.last_updated; Type: COMMENT; Schema: public; Owner: sexy
+--
+
+COMMENT ON COLUMN public.sexy_user_stats.last_updated IS 'Timestamp for cache invalidation';
+
 
 --
 -- Name: sexy_video_likes; Type: TABLE; Schema: public; Owner: sexy
@@ -3669,6 +3894,31 @@ COPY public.junction_directus_users_files (id, directus_users_id, directus_files
 
 
 --
+-- Data for Name: sexy_achievements; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_achievements (id, code, name, description, icon, category, required_count, points_reward, sort, status) FROM stdin;
+039d000e-1faa-4ab2-a44f-52f4ce431b46	first_recording	First Recording	Create your first recording	🎬	recordings	1	50	1	published
+d7fce56e-ac34-4cfd-bdaf-a8bb09f14a43	recording_10	Recording Enthusiast	Create 10 recordings	📹	recordings	10	100	2	published
+28d67b94-fdc3-4565-bc3a-df172f272047	recording_50	Prolific Creator	Create 50 recordings	🎥	recordings	50	500	3	published
+8d38f00a-5fd6-4384-9390-6961cbebc4dc	recording_100	Recording Master	Create 100 recordings	🏆	recordings	100	1000	4	published
+ebc2927e-3e25-44d9-bf13-bc54a6596711	featured_recording	Featured Creator	Get a recording featured	⭐	recordings	1	200	5	published
+0617b3c0-ec8e-40d8-84f9-621c4ecbcbf3	first_play	First Play	Play your first recording	▶️	playback	1	25	10	published
+f47fe499-9954-4caf-a5c8-c0a1156128b2	play_100	Active Player	Play 100 recordings	🎮	playback	100	250	11	published
+a3de1735-de10-472e-ade9-b75ca3f6e0f3	play_500	Playback Enthusiast	Play 500 recordings	🔥	playback	500	1000	12	published
+355dd080-aeb8-4600-95c7-20d93e8d8f4b	completionist_10	Completionist	Complete 10 recordings to 90%+	✅	playback	10	100	13	published
+c54eb528-f4e4-43fa-bad1-6cb845cbeb24	completionist_100	Super Completionist	Complete 100 recordings	💯	playback	100	500	14	published
+329e2582-e31a-4727-a3fb-3869d37a48d1	first_comment	First Comment	Leave your first comment	💬	social	1	25	20	published
+8f7e17a6-33fa-4fb2-ba3b-b5f306236c2f	comment_50	Conversationalist	Leave 50 comments	💭	social	50	200	21	published
+695dc554-c245-416b-8aff-8a740cb32c59	comment_250	Community Voice	Leave 250 comments	📣	social	250	750	22	published
+9b5de2b3-4a91-4e30-990b-9ba0e971f79d	early_adopter	Early Adopter	Join in the first month	🚀	special	1	500	30	published
+d3068c32-89b8-49b9-9630-f0b85e0b5e69	one_year	One Year Anniversary	Be a member for 1 year	🎂	special	1	1000	31	published
+ba587a5e-9a81-4e9f-a7d4-d216e6e22e11	balanced_creator	Balanced Creator	50 recordings + 100 plays	⚖️	special	1	500	32	published
+b6b41106-b96d-4e39-a4f5-4060f7f3c730	top_10_rank	Top 10 Leaderboard	Reach top 10 on leaderboard	🏅	special	1	2000	33	published
+\.
+
+
+--
 -- Data for Name: sexy_articles; Type: TABLE DATA; Schema: public; Owner: sexy
 --
 
@@ -3686,10 +3936,42 @@ COPY public.sexy_model_photos (id, directus_users_id, directus_files_id, date_cr
 
 
 --
+-- Data for Name: sexy_recording_plays; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_recording_plays (id, user_id, recording_id, duration_played, completed, date_created, date_updated) FROM stdin;
+\.
+
+
+--
 -- Data for Name: sexy_recordings; Type: TABLE DATA; Schema: public; Owner: sexy
 --
 
 COPY public.sexy_recordings (id, title, description, slug, duration, events, device_info, tags, linked_video, status, public, user_created, user_updated, date_created, date_updated) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sexy_user_achievements; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_user_achievements (id, user_id, achievement_id, progress, date_unlocked) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sexy_user_points; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_user_points (id, user_id, action, points, recording_id, date_created) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sexy_user_stats; Type: TABLE DATA; Schema: public; Owner: sexy
+--
+
+COPY public.sexy_user_stats (id, user_id, total_raw_points, total_weighted_points, recordings_count, playbacks_count, comments_count, achievements_count, last_updated) FROM stdin;
 \.
 
 
@@ -4111,6 +4393,22 @@ ALTER TABLE ONLY public.junction_directus_users_files
 
 
 --
+-- Name: sexy_achievements sexy_achievements_code_key; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_achievements
+    ADD CONSTRAINT sexy_achievements_code_key UNIQUE (code);
+
+
+--
+-- Name: sexy_achievements sexy_achievements_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_achievements
+    ADD CONSTRAINT sexy_achievements_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sexy_articles sexy_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
 --
 
@@ -4143,6 +4441,14 @@ ALTER TABLE ONLY public.sexy_model_photos
 
 
 --
+-- Name: sexy_recording_plays sexy_recording_plays_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recording_plays
+    ADD CONSTRAINT sexy_recording_plays_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sexy_recordings sexy_recordings_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
 --
 
@@ -4156,6 +4462,46 @@ ALTER TABLE ONLY public.sexy_recordings
 
 ALTER TABLE ONLY public.sexy_recordings
     ADD CONSTRAINT sexy_recordings_slug_key UNIQUE (slug);
+
+
+--
+-- Name: sexy_user_achievements sexy_user_achievements_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_achievements
+    ADD CONSTRAINT sexy_user_achievements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sexy_user_achievements sexy_user_achievements_user_id_achievement_id_key; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_achievements
+    ADD CONSTRAINT sexy_user_achievements_user_id_achievement_id_key UNIQUE (user_id, achievement_id);
+
+
+--
+-- Name: sexy_user_points sexy_user_points_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_points
+    ADD CONSTRAINT sexy_user_points_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sexy_user_stats sexy_user_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_stats
+    ADD CONSTRAINT sexy_user_stats_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sexy_user_stats sexy_user_stats_user_id_key; Type: CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_stats
+    ADD CONSTRAINT sexy_user_stats_user_id_key UNIQUE (user_id);
 
 
 --
@@ -4219,6 +4565,97 @@ ALTER TABLE ONLY public.sexy_videos
 --
 
 CREATE INDEX directus_users_slug_index ON public.directus_users USING btree (slug);
+
+
+--
+-- Name: idx_achievements_category; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_achievements_category ON public.sexy_achievements USING btree (category);
+
+
+--
+-- Name: idx_achievements_code; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_achievements_code ON public.sexy_achievements USING btree (code);
+
+
+--
+-- Name: idx_recording_plays_date; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_recording_plays_date ON public.sexy_recording_plays USING btree (date_created);
+
+
+--
+-- Name: idx_recording_plays_recording; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_recording_plays_recording ON public.sexy_recording_plays USING btree (recording_id);
+
+
+--
+-- Name: idx_recording_plays_user; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_recording_plays_user ON public.sexy_recording_plays USING btree (user_id);
+
+
+--
+-- Name: idx_user_achievements_achievement; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_achievements_achievement ON public.sexy_user_achievements USING btree (achievement_id);
+
+
+--
+-- Name: idx_user_achievements_unlocked; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_achievements_unlocked ON public.sexy_user_achievements USING btree (date_unlocked) WHERE (date_unlocked IS NOT NULL);
+
+
+--
+-- Name: idx_user_achievements_user; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_achievements_user ON public.sexy_user_achievements USING btree (user_id);
+
+
+--
+-- Name: idx_user_points_action; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_points_action ON public.sexy_user_points USING btree (action);
+
+
+--
+-- Name: idx_user_points_date; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_points_date ON public.sexy_user_points USING btree (date_created);
+
+
+--
+-- Name: idx_user_points_user; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_points_user ON public.sexy_user_points USING btree (user_id);
+
+
+--
+-- Name: idx_user_stats_user; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_stats_user ON public.sexy_user_stats USING btree (user_id);
+
+
+--
+-- Name: idx_user_stats_weighted; Type: INDEX; Schema: public; Owner: sexy
+--
+
+CREATE INDEX idx_user_stats_weighted ON public.sexy_user_stats USING btree (total_weighted_points DESC);
 
 
 --
@@ -4735,6 +5172,22 @@ ALTER TABLE ONLY public.sexy_model_photos
 
 
 --
+-- Name: sexy_recording_plays sexy_recording_plays_recording_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recording_plays
+    ADD CONSTRAINT sexy_recording_plays_recording_id_fkey FOREIGN KEY (recording_id) REFERENCES public.sexy_recordings(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sexy_recording_plays sexy_recording_plays_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_recording_plays
+    ADD CONSTRAINT sexy_recording_plays_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: sexy_recordings sexy_recordings_linked_video_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
 --
 
@@ -4748,6 +5201,46 @@ ALTER TABLE ONLY public.sexy_recordings
 
 ALTER TABLE ONLY public.sexy_recordings
     ADD CONSTRAINT sexy_recordings_user_created_fkey FOREIGN KEY (user_created) REFERENCES public.directus_users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sexy_user_achievements sexy_user_achievements_achievement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_achievements
+    ADD CONSTRAINT sexy_user_achievements_achievement_id_fkey FOREIGN KEY (achievement_id) REFERENCES public.sexy_achievements(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sexy_user_achievements sexy_user_achievements_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_achievements
+    ADD CONSTRAINT sexy_user_achievements_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sexy_user_points sexy_user_points_recording_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_points
+    ADD CONSTRAINT sexy_user_points_recording_id_fkey FOREIGN KEY (recording_id) REFERENCES public.sexy_recordings(id) ON DELETE SET NULL;
+
+
+--
+-- Name: sexy_user_points sexy_user_points_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_points
+    ADD CONSTRAINT sexy_user_points_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sexy_user_stats sexy_user_stats_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sexy
+--
+
+ALTER TABLE ONLY public.sexy_user_stats
+    ADD CONSTRAINT sexy_user_stats_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.directus_users(id) ON DELETE CASCADE;
 
 
 --
@@ -4850,5 +5343,5 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ivu3VjNHP3NwggAF0b1v8SBQfAoLpCqOVi2HaUk4qIFPyodgHm5zfwedlJt7FCL
+\unrestrict E9Q5asC8Y4qbOzEEqbhDkKKxddsl3yTWYcQ4w5feIUp8ybYcX7pwih7N16ll0Lm
 
