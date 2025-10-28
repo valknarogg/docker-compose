@@ -1,7 +1,7 @@
 services:
-  gotify:
+  gotify_app:
     image: ${GOTIFY_IMAGE}
-    container_name: ${GOTIFY_COMPOSE_PROJECT_NAME}_gotify
+    container_name: ${GOTIFY_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped
     volumes:
       - gotify_data:/app/data

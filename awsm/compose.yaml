@@ -1,5 +1,5 @@
 services:
-  awesome:
+  awesome_app:
     image: ${AWESOME_IMAGE:-ghcr.io/valknarness/awesome-app:latest}
     container_name: ${AWESOME_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped

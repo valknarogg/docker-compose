@@ -1,5 +1,5 @@
 services:
-  umami:
+  umami_app:
     image: ${TRACK_DOCKER_IMAGE}
     container_name: ${TRACK_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped

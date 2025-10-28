@@ -1,5 +1,5 @@
 services:
-  wg-easy:
+  vpn_app:
     image: ${VPN_DOCKER_IMAGE}
     container_name: ${VPN_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped

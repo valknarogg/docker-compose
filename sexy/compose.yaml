@@ -1,5 +1,5 @@
 services:
-  directus:
+  sexy_api:
     image: ${SEXY_DIRECTUS_IMAGE}
     container_name: ${SEXY_COMPOSE_PROJECT_NAME}_api
     restart: unless-stopped
@@ -56,7 +56,7 @@ services:
       - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-api-web-secure.loadbalancer.server.port=8055'
       - 'traefik.docker.network=${NETWORK_NAME}'
 
-  frontend:
+  sexy_frontend:
     image: ${SEXY_FRONTEND_IMAGE}
     container_name: ${SEXY_COMPOSE_PROJECT_NAME}_frontend
     restart: unless-stopped

@@ -1,5 +1,5 @@
 services:
-  traefik:
+  traefik_app:
     image: ${PROXY_DOCKER_IMAGE}
     container_name: ${PROXY_COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped
