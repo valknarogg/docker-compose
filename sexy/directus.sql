@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict E9Q5asC8Y4qbOzEEqbhDkKKxddsl3yTWYcQ4w5feIUp8ybYcX7pwih7N16ll0Lm
+\restrict bmv0juyU8NamoeaUP4HAP39XkrsNRSDf6HcqNK4XhAN0EEcEX3Im6MdD2ZceTo6
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -1299,7 +1299,7 @@ CREATE TABLE public.sexy_recordings (
     title character varying(255) NOT NULL,
     description text,
     slug character varying(255) NOT NULL,
-    duration integer NOT NULL,
+    duration numeric(10,2) NOT NULL,
     events jsonb NOT NULL,
     device_info jsonb NOT NULL,
     tags text[] DEFAULT '{}'::text[],
@@ -5343,5 +5343,5 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict E9Q5asC8Y4qbOzEEqbhDkKKxddsl3yTWYcQ4w5feIUp8ybYcX7pwih7N16ll0Lm
+\unrestrict bmv0juyU8NamoeaUP4HAP39XkrsNRSDf6HcqNK4XhAN0EEcEX3Im6MdD2ZceTo6
 
