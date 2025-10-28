@@ -111,7 +111,7 @@ scripts:
   sexy/db/import: |
     echo "⚠️  WARNING: This will replace the current database!" &&
     echo "Make sure core_postgres container is running..." &&
-    docker exec -i core_postgres psql -U valknar -d directus < ~/Projects/docker-compose/sexy/directus.sql &&
+    docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
     echo "✓ Database imported from ~/Projects/docker-compose/sexy/directus.sql" &&
     echo "Restarting Directus API..." &&
     docker restart sexy_api &&
@@ -134,7 +134,7 @@ scripts:
   sexy/import/all: |
     echo "⚠️  WARNING: This will completely replace the database and schema!" &&
     echo "Importing database..." &&
-    docker exec -i core_postgres psql -U valknar -d directus < ~/Projects/docker-compose/sexy/directus.sql &&
+    docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
     echo "✓ Database imported" &&
     echo "Applying Directus schema..." &&
     docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml &&
