@@ -1,0 +1,30 @@
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Check for updates every 5 minutes (300 seconds)
+      WATCHTOWER_POLL_INTERVAL: ${WATCHTOWER_POLL_INTERVAL:-300}
+      # Only update containers with the watchtower label
+      WATCHTOWER_LABEL_ENABLE: ${WATCHTOWER_LABEL_ENABLE:-true}
+      # Clean up old images after update
+      WATCHTOWER_CLEANUP: ${WATCHTOWER_CLEANUP:-true}
+      # Include stopped containers
+      WATCHTOWER_INCLUDE_STOPPED: ${WATCHTOWER_INCLUDE_STOPPED:-false}
+      # Include restarting containers
+      WATCHTOWER_INCLUDE_RESTARTING: ${WATCHTOWER_INCLUDE_RESTARTING:-true}
+      # Run once and exit (set to false for continuous monitoring)
+      WATCHTOWER_RUN_ONCE: ${WATCHTOWER_RUN_ONCE:-false}
+      # Notifications via Shoutrrr
+      WATCHTOWER_NOTIFICATIONS: ${WATCHTOWER_NOTIFICATIONS:-}
+      WATCHTOWER_NOTIFICATION_URL: ${WATCHTOWER_NOTIFICATION_URL:-}
+      # Log level (trace, debug, info, warn, error, fatal, panic)
+      WATCHTOWER_LOG_LEVEL: ${WATCHTOWER_LOG_LEVEL:-info}
+      # Rolling restart (update one container at a time)
+      WATCHTOWER_ROLLING_RESTART: ${WATCHTOWER_ROLLING_RESTART:-false}
+    labels:
+      # Allow watchtower to update itself
+      - com.centurylinklabs.watchtower.enable=true

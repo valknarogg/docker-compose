@@ -56,6 +56,15 @@ envs:
     # Proxy
     PROXY_COMPOSE_PROJECT_NAME: proxy
     PROXY_DOCKER_IMAGE: traefik:latest
+    # Watchtower
+    WATCHTOWER_POLL_INTERVAL: 300
+    WATCHTOWER_LABEL_ENABLE: true
+    WATCHTOWER_CLEANUP: true
+    WATCHTOWER_INCLUDE_STOPPED: false
+    WATCHTOWER_INCLUDE_RESTARTING: true
+    WATCHTOWER_RUN_ONCE: false
+    WATCHTOWER_LOG_LEVEL: info
+    WATCHTOWER_ROLLING_RESTART: false
 
 scripts:
   config: docker compose config

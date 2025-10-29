@@ -86,6 +86,7 @@ services:
       - 'traefik.http.routers.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.middlewares=${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure-compress'
       - 'traefik.http.services.${SEXY_COMPOSE_PROJECT_NAME}-frontend-web-secure.loadbalancer.server.port=3000'
       - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'com.centurylinklabs.watchtower.enable=true'
 
 volumes:
   directus_uploads:
