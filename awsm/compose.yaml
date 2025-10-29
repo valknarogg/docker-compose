@@ -44,6 +44,7 @@ services:
       - 'traefik.http.routers.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.middlewares=${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure-compress'
       - 'traefik.http.services.${AWESOME_COMPOSE_PROJECT_NAME}-app-web-secure.loadbalancer.server.port=3000'
       - 'traefik.docker.network=${NETWORK_NAME}'
+      - 'com.centurylinklabs.watchtower.enable=true'
 volumes:
   awesome_data:
     name: ${AWESOME_COMPOSE_PROJECT_NAME}_data
