@@ -70,10 +70,9 @@ scripts:
   # Database export scripts for sexy.pivoine.art
   # Export PostgreSQL database schema and data with DROP IF EXISTS statements
   sexy/db/export: |
-    export $(cat .env | xargs) &&
     docker exec core_postgres pg_dump \
-      -U $DB_USER \
-      -d $SEXY_DB_NAME \
+      -U sexy \
+      -d sexy \
       --no-owner \
       --no-acl \
       --clean \
@@ -90,11 +89,10 @@ scripts:
 
   # Combined export: both database and schema
   sexy/export/all: |
-    export $(cat .env | xargs) &&
     echo "Exporting database..." &&
     docker exec core_postgres pg_dump \
-      -U $DB_USER \
-      -d $SEXY_DB_NAME \
+      -U sexy \
+      -d sexy \
       --no-owner \
       --no-acl \
       --clean \
@@ -111,10 +109,9 @@ scripts:
   # Import PostgreSQL database from SQL dump
   # WARNING: This will DROP existing tables if they exist (uses --clean --if-exists)
   sexy/db/import: |
-    export $(cat .env | xargs) &&
     echo "⚠️  WARNING: This will replace the current database!" &&
     echo "Make sure core_postgres container is running..." &&
-    docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
+    docker exec -i core_postgres psql -U valknar -d directus < ~/Projects/docker-compose/sexy/directus.sql &&
     echo "✓ Database imported from ~/Projects/docker-compose/sexy/directus.sql" &&
     echo "Restarting Directus API..." &&
     docker restart sexy_api &&
@@ -135,10 +132,9 @@ scripts:
   # Step 1: Import database (drops/recreates all tables)
   # Step 2: Apply schema (updates Directus metadata)
   sexy/import/all: |
-    export $(cat .env | xargs) &&
     echo "⚠️  WARNING: This will completely replace the database and schema!" &&
     echo "Importing database..." &&
-    docker exec -i core_postgres psql -U $DB_USER -d $SEXY_DB_NAME < ~/Projects/docker-compose/sexy/directus.sql &&
+    docker exec -i core_postgres psql -U ${DB_USER} -d ${SEXY_DB_NAME} < ~/Projects/docker-compose/sexy/directus.sql &&
     echo "✓ Database imported" &&
     echo "Applying Directus schema..." &&
     docker cp ~/Projects/docker-compose/sexy/schema.yaml sexy_api:/directus/schema.yaml &&
@@ -155,5 +151,4 @@ scripts:
     docker cp "sexy/uploads" "sexy_api:/directus"
   net/create: docker network create "$NETWORK_NAME"
   awsm/import: |
-    artifact_github_download.sh valknarness/awesome-app -n awesome-database -o /tmp
     docker cp "/tmp/awesome-database" "awesome_app:/home/node/.awesome"
