@@ -6,6 +6,7 @@ include:
   - gotify/compose.yaml
   - umami/compose.yaml
   - proxy/compose.yaml
+  - watch/compose.yaml
 
 networks:
   compose_network:
